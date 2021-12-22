@@ -2,11 +2,39 @@ import com.google.common.collect.ImmutableList
 import graphql.ExecutionInput
 import graphql.ParseAndValidate
 import graphql.Scalars
-import graphql.language.*
-import graphql.schema.*
+import graphql.language.Argument
+import graphql.language.ArrayValue
+import graphql.language.BooleanValue
+import graphql.language.Field
+import graphql.language.FloatValue
+import graphql.language.IntValue
+import graphql.language.NullValue
+import graphql.language.ObjectField
+import graphql.language.ObjectValue
+import graphql.language.OperationDefinition
+import graphql.language.StringValue
+import graphql.language.Value
+import graphql.schema.GraphQLArgument
+import graphql.schema.GraphQLFieldDefinition
+import graphql.schema.GraphQLInputObjectField
+import graphql.schema.GraphQLInputObjectType
+import graphql.schema.GraphQLInputType
+import graphql.schema.GraphQLList
+import graphql.schema.GraphQLNonNull
+import graphql.schema.GraphQLObjectType
+import graphql.schema.GraphQLOutputType
+import graphql.schema.GraphQLSchema
+import graphql.schema.GraphQLType
+import graphql.schema.GraphQLTypeReference
 import graphql.schema.idl.SchemaPrinter
+import org.apache.calcite.adapter.enumerable.EnumerableConvention
 import org.apache.calcite.jdbc.JavaTypeFactoryImpl
-import org.apache.calcite.plan.*
+import org.apache.calcite.plan.ConventionTraitDef
+import org.apache.calcite.plan.RelOptCluster
+import org.apache.calcite.plan.RelOptPlanner
+import org.apache.calcite.plan.RelOptSchema
+import org.apache.calcite.plan.RelOptTable
+import org.apache.calcite.plan.RelOptUtil
 import org.apache.calcite.plan.visualizer.RuleMatchVisualizer
 import org.apache.calcite.plan.volcano.VolcanoPlanner
 import org.apache.calcite.prepare.RelOptTableImpl
@@ -20,12 +48,18 @@ import org.apache.calcite.rex.RexBuilder
 import org.apache.calcite.rex.RexLiteral
 import org.apache.calcite.rex.RexNode
 import org.apache.calcite.schema.Schema
+import org.apache.calcite.sql.SqlBinaryOperator
+import org.apache.calcite.sql.SqlExplainFormat
+import org.apache.calcite.sql.SqlExplainLevel
+import org.apache.calcite.sql.`fun`.SqlStdOperatorTable
 import org.apache.calcite.sql.type.SqlTypeFamily
+import org.apache.calcite.tools.FrameworkConfig
+import org.apache.calcite.tools.Frameworks
 import org.apache.calcite.tools.RelBuilder
 import java.io.PrintWriter
 
-
 object BaseGraphQLTypes {
+
     val IntComparisonExpressionType = mkComparisonExpressionInputType(
         Scalars.GraphQLInt,
         "Int_comparison_exp",
@@ -43,7 +77,7 @@ object BaseGraphQLTypes {
         "Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
     )
 
-    val StringComparisonExpressionType = mkComparisonExpressionInputType(
+    val StringComparisonExpressionType: GraphQLInputObjectType = mkComparisonExpressionInputType(
         Scalars.GraphQLString,
         "String_comparison_exp",
         "Boolean expression to compare columns of type \"String\". All fields are combined with logical 'AND'."
@@ -97,13 +131,6 @@ object BaseGraphQLTypes {
 
         return inputObject.build()
     }
-
-    val graphqlTypeToComparsionExpressionTypeMap: Map<Class<out GraphQLScalarType>, GraphQLInputObjectType> = mapOf(
-        Scalars.GraphQLString::class.java to StringComparisonExpressionType,
-        Scalars.GraphQLInt::class.java to IntComparisonExpressionType,
-        Scalars.GraphQLFloat::class.java to FloatComparisonExpressionType,
-        Scalars.GraphQLBoolean::class.java to BooleanComparisonExpressionType,
-    )
 }
 
 object CalciteGraphQLUtils {
@@ -184,92 +211,35 @@ object CalciteGraphQLUtils {
                             gqlWherePredicatesToRexNodePredicates(
                                 builder,
                                 notPredicate!!
-                            ).get(0)
+                            )[0]
                         )
                     )
                 }
                 else -> {
-                    val property = it.name
-                    val firstField: ObjectField? = (it.value as? ObjectValue)?.objectFields?.first()
-                    val predicate = firstField?.name?.let(ComparisonExpression::fromValue)
-                    val value = firstField?.value ?: throw IllegalArgumentException("Value is null")
-                    return when (predicate) {
-                        ComparisonExpression.EQUAL -> {
-                            listOf(
-                                builder.equals(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.NOT_EQUAL -> {
-                            listOf(
-                                builder.notEquals(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.GREATER_THAN -> {
-                            listOf(
-                                builder.greaterThan(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.GREATER_THAN_OR_EQUAL -> {
-                            listOf(
-                                builder.greaterThanOrEqual(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.LESS_THAN -> {
-                            listOf(
-                                builder.lessThan(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.LESS_THAN_OR_EQUAL -> {
-                            listOf(
-                                builder.lessThanOrEqual(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.IN -> {
-                            listOf(
-                                builder.`in`(
-                                    builder.field(property),
-                                    graphqlObjectValueToRexLiteralValue(builder, value)
-                                )
-                            )
-                        }
-                        ComparisonExpression.NOT_IN -> {
-                            listOf(
-                                builder.not(
-                                    builder.`in`(
-                                        builder.field(property),
-                                        graphqlObjectValueToRexLiteralValue(
-                                            builder,
-                                            value
-                                        )
-                                    )
-                                )
-                            )
-                        }
-                        else -> {
-                            throw IllegalArgumentException("Unsupported comparison expression")
-                        }
-                    }
+                    return rexNodes(it, builder)
                 }
             }
         }
+    }
+
+    private fun rexNodes(
+        it: ObjectField,
+        builder: RelBuilder
+    ): List<RexNode> {
+        val property = it.name
+        val firstField: ObjectField? = (it.value as? ObjectValue)?.objectFields?.first()
+        val value = firstField?.value ?: throw IllegalArgumentException("Value is null")
+        val predicate = firstField.name?.let(ComparisonOperator.Companion::fromValue)
+        if (predicate != null) {
+            return listOf(
+                builder.call(
+                    predicate.sqlOperator,
+                    builder.field(property),
+                    graphqlObjectValueToRexLiteralValue(builder, value)
+                )
+            )
+        }
+        throw IllegalArgumentException("Unsupported comparison expression")
     }
 
     fun calciteSchemaToGraphQLSchema(calciteSchema: Schema): GraphQLSchema {
@@ -277,113 +247,114 @@ object CalciteGraphQLUtils {
             .query(
                 GraphQLObjectType.newObject()
                     .name("Query")
-                    .fields(calciteSchema.tableNames.map { tableName: String ->
-                        GraphQLFieldDefinition.newFieldDefinition()
-                            .name(tableName)
-                            .type(
-                                GraphQLObjectType.newObject()
-                                    .name(tableName)
-                                    .fields(calciteSchema.getTable(tableName)
-                                        ?.getRowType(JavaTypeFactoryImpl())
-                                        ?.fieldList
-                                        ?.map { field: RelDataTypeField ->
-                                            GraphQLFieldDefinition.newFieldDefinition()
-                                                .name(field.name)
-                                                .type(relDataTypeToGraphQLType(field.type) as GraphQLOutputType?)
-                                                .build()
-                                        }
-                                    )
-                            )
-                            .arguments(
-                                listOf(
-                                    GraphQLArgument.newArgument()
-                                        .name("limit")
-                                        .type(Scalars.GraphQLInt)
-                                        .build(),
-                                    GraphQLArgument.newArgument()
-                                        .name("offset")
-                                        .type(Scalars.GraphQLInt)
-                                        .build(),
-                                    GraphQLArgument.newArgument()
-                                        .name("order_by")
-                                        .type(GraphQLList.list(Scalars.GraphQLString))
-                                        .build(),
-                                    GraphQLArgument
-                                        .newArgument()
-                                        .name("where")
-                                        .type(
-                                            GraphQLInputObjectType.newInputObject()
-                                                .name(tableName + "_bool_exp")
-                                                .fields(calciteSchema.getTable(tableName)
-                                                    ?.getRowType(JavaTypeFactoryImpl())
-                                                    ?.fieldList
-                                                    ?.map { field1: RelDataTypeField ->
-                                                        GraphQLInputObjectField.newInputObjectField()
-                                                            .name(field1.name)
-                                                            .type(
-                                                                relDataTypeToGraphQLComparisonExprType(
-                                                                    field1.type
-                                                                ) as GraphQLInputType?
-                                                            )
-                                                            .build()
-                                                    }
-                                                )
-                                                .field(
-                                                    GraphQLInputObjectField.newInputObjectField()
-                                                        .name("_and")
-                                                        .type(
-                                                            GraphQLList.list(
-                                                                GraphQLNonNull(
-                                                                    GraphQLTypeReference.typeRef(tableName + "_bool_exp")
-                                                                )
-                                                            )
-                                                        )
-                                                )
-                                                .field(
-                                                    GraphQLInputObjectField.newInputObjectField()
-                                                        .name("_or")
-                                                        .type(
-                                                            GraphQLList.list(
-                                                                GraphQLNonNull(
-                                                                    GraphQLTypeReference.typeRef(tableName + "_bool_exp")
-                                                                )
-                                                            )
-                                                        )
-                                                )
-                                                .field(
-                                                    GraphQLInputObjectField.newInputObjectField()
-                                                        .name("_not")
-                                                        .type(GraphQLTypeReference.typeRef(tableName + "_bool_exp"))
+                    .fields(
+                        calciteSchema.tableNames.map { tableName: String ->
+                            GraphQLFieldDefinition.newFieldDefinition()
+                                .name(tableName)
+                                .type(
+                                    GraphQLObjectType.newObject()
+                                        .name(tableName)
+                                        .fields(
+                                            calciteSchema.getTable(tableName)
+                                                ?.getRowType(JavaTypeFactoryImpl())
+                                                ?.fieldList
+                                                ?.map { field: RelDataTypeField ->
+                                                    GraphQLFieldDefinition.newFieldDefinition()
+                                                        .name(field.name)
+                                                        .type(relDataTypeToGraphQLType(field.type) as GraphQLOutputType?)
                                                         .build()
-                                                )
-                                                .build()
-                                        ).build()
+                                                }
+                                        )
                                 )
-                            )
-                            .build()
-                    }
-                        .toList()
+                                .arguments(
+                                    listOf(
+                                        GraphQLArgument.newArgument()
+                                            .name("limit")
+                                            .type(Scalars.GraphQLInt)
+                                            .build(),
+                                        GraphQLArgument.newArgument()
+                                            .name("offset")
+                                            .type(Scalars.GraphQLInt)
+                                            .build(),
+                                        GraphQLArgument.newArgument()
+                                            .name("order_by")
+                                            .type(GraphQLList(Scalars.GraphQLString))
+                                            .build(),
+                                        GraphQLArgument
+                                            .newArgument()
+                                            .name("where")
+                                            .type(
+                                                GraphQLInputObjectType.newInputObject()
+                                                    .name(tableName + "_bool_exp")
+                                                    .fields(
+                                                        calciteSchema.getTable(tableName)
+                                                            ?.getRowType(JavaTypeFactoryImpl())
+                                                            ?.fieldList
+                                                            ?.map { field1: RelDataTypeField ->
+                                                                GraphQLInputObjectField.newInputObjectField()
+                                                                    .name(field1.name)
+                                                                    .type(
+                                                                        relDataTypeToGraphQLComparisonExprType(
+                                                                            field1.type
+                                                                        ) as GraphQLInputType?
+                                                                    )
+                                                                    .build()
+                                                            }
+                                                    )
+                                                    .field(
+                                                        GraphQLInputObjectField.newInputObjectField()
+                                                            .name("_and")
+                                                            .type(
+                                                                GraphQLList(
+                                                                    GraphQLNonNull(
+                                                                        GraphQLTypeReference(tableName + "_bool_exp")
+                                                                    )
+                                                                )
+                                                            )
+                                                    )
+                                                    .field(
+                                                        GraphQLInputObjectField.newInputObjectField()
+                                                            .name("_or")
+                                                            .type(
+                                                                GraphQLList(
+                                                                    GraphQLNonNull(
+                                                                        GraphQLTypeReference(tableName + "_bool_exp")
+                                                                    )
+                                                                )
+                                                            )
+                                                    )
+                                                    .field(
+                                                        GraphQLInputObjectField.newInputObjectField()
+                                                            .name("_not")
+                                                            .type(GraphQLTypeReference(tableName + "_bool_exp"))
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            ).build()
+                                    )
+                                ).build()
+                        }.toList()
                     )
             ).build()
     }
-
 }
 
-enum class ComparisonExpression(val value: String) {
-    EQUAL("_eq"),
-    NOT_EQUAL("_neq"),
-    GREATER_THAN("_gt"),
-    GREATER_THAN_OR_EQUAL("_gte"),
-    LESS_THAN("_lt"),
-    LESS_THAN_OR_EQUAL("_lte"),
-    IN("_in"),
-    NOT_IN("_not_in");
+enum class ComparisonOperator(val gqlArgumentName: String, val sqlOperator: SqlBinaryOperator) {
+    EQUAL("_eq", SqlStdOperatorTable.EQUALS),
+    NOT_EQUAL("_neq", SqlStdOperatorTable.NOT_EQUALS),
+    GREATER_THAN("_gt", SqlStdOperatorTable.GREATER_THAN),
+    GREATER_THAN_OR_EQUAL("_gte", SqlStdOperatorTable.GREATER_THAN_OR_EQUAL),
+    LESS_THAN("_lt", SqlStdOperatorTable.LESS_THAN),
+    LESS_THAN_OR_EQUAL("_lte", SqlStdOperatorTable.LESS_THAN_OR_EQUAL),
+    IN("_in", SqlStdOperatorTable.IN),
+    NOT_IN("_not_in", SqlStdOperatorTable.NOT_IN);
 //    LIKE("_like"),
 //    ILIKE("_ilike");
 
     companion object {
-        fun fromValue(value: String): ComparisonExpression {
-            return values().firstOrNull { it.value == value } ?: throw IllegalArgumentException("Unknown value: $value")
+        fun fromValue(value: String): ComparisonOperator {
+            return values().firstOrNull { it.gqlArgumentName == value }
+                ?: throw IllegalArgumentException("Unknown value: $value")
         }
     }
 }
@@ -407,12 +378,68 @@ fun schemaToRelOptSchema(schema: Schema): RelOptSchema {
         }
 
         override fun registerRules(planner: RelOptPlanner) {
-
         }
     }
 }
 
+fun executeQuery(
+    config: FrameworkConfig,
+    query: String,
+    debug: Boolean
+) {
+    val planner = Frameworks.getPlanner(config)
+    if (debug) {
+        println("Query:$query")
+    }
+    var n = planner.parse(query)
+    n = planner.validate(n)
+    val root = planner.rel(n).project()
+    if (debug) {
+        println(
+            RelOptUtil.dumpPlan(
+                "-- Logical Plan", root, SqlExplainFormat.TEXT,
+                SqlExplainLevel.DIGEST_ATTRIBUTES
+            )
+        )
+    }
+    val cluster = root.cluster
+    val optPlanner = cluster.planner
+    val desiredTraits = cluster.traitSet().replace(EnumerableConvention.INSTANCE)
+    val newRoot = optPlanner.changeTraits(root, desiredTraits)
+    if (debug) {
+        println(
+            RelOptUtil.dumpPlan(
+                "-- Mid Plan", newRoot, SqlExplainFormat.TEXT,
+                SqlExplainLevel.DIGEST_ATTRIBUTES
+            )
+        )
+    }
+    optPlanner.root = newRoot
+    val bestExp = optPlanner.findBestExp()
+    if (debug) {
+        println(
+            RelOptUtil.dumpPlan(
+                "-- Best Plan", bestExp, SqlExplainFormat.TEXT,
+                SqlExplainLevel.DIGEST_ATTRIBUTES
+            )
+        )
+    }
+}
+
 object ExampleKotlin {
+
+    private const val sqlQuery = """
+        SELECT
+            empid, name, salary, deptno, commission
+        FROM
+            emp
+        WHERE
+            deptno = 20
+            AND
+                (salary > 8000 AND salary < 10000)
+            AND
+                name = 'Eric' OR commission = 10
+    """
 
     private const val graphqlQuery = """
             query {
@@ -421,7 +448,7 @@ object ExampleKotlin {
                         _and: [
                             { deptno: { _eq: 20 } }
                             {
-                                _or: [
+                                _and: [
                                     { salary: { _gte: 8000 } },
                                     { salary: { _lte: 10000 } }
                                 ]
@@ -513,12 +540,9 @@ object ExampleKotlin {
                         val planned = planner.findBestExp()
                         println("Planner result: ")
                         println(planned)
-
                     }
-
                 }
             }
         }
-
     }
 }
