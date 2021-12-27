@@ -41,6 +41,7 @@ import org.apache.calcite.prepare.RelOptTableImpl
 import org.apache.calcite.rel.RelCollationTraitDef
 import org.apache.calcite.rel.RelNode
 import org.apache.calcite.rel.core.RelFactories
+import org.apache.calcite.rel.rel2sql.RelToSqlConverter
 import org.apache.calcite.rel.type.RelDataType
 import org.apache.calcite.rel.type.RelDataTypeFactory
 import org.apache.calcite.rel.type.RelDataTypeField
@@ -48,10 +49,13 @@ import org.apache.calcite.rex.RexBuilder
 import org.apache.calcite.rex.RexLiteral
 import org.apache.calcite.rex.RexNode
 import org.apache.calcite.schema.Schema
+import org.apache.calcite.schema.impl.AbstractSchema
 import org.apache.calcite.sql.SqlBinaryOperator
 import org.apache.calcite.sql.SqlExplainFormat
 import org.apache.calcite.sql.SqlExplainLevel
 import org.apache.calcite.sql.`fun`.SqlStdOperatorTable
+import org.apache.calcite.sql.dialect.CalciteSqlDialect
+import org.apache.calcite.sql.parser.SqlParser
 import org.apache.calcite.sql.type.SqlTypeFamily
 import org.apache.calcite.tools.FrameworkConfig
 import org.apache.calcite.tools.Frameworks
@@ -176,70 +180,94 @@ object CalciteGraphQLUtils {
         }
     }
 
-    fun gqlWherePredicatesToRexNodePredicates(
+    /**
+     * Converts a GraphQL [ObjectValue] from the "where" clause in a query to a Calcite [RexNode]
+     *
+     * Example:
+     *  query {
+     *      users(where: {
+     *          _and: [{ name: { _eq: "John" } }, { age: { _gte: 25 } }]
+     *      }) {}
+     *  }
+     *
+     * @param builder the builder to use to create the RexNode
+     * @param gqlNode the GraphQL [ObjectValue] to convert
+     * @return the Calcite [RexNode]
+     */
+    fun recursiveGQLWherePredicatesToRexNodePredicates(
         builder: RelBuilder,
         gqlNode: ObjectValue
     ): List<RexNode> {
-        return gqlNode.objectFields.map {
-            return when (it.name) {
+        // We can safely parrallelize the map because order is not important
+        return gqlNode.objectFields.stream().parallel().map {
+            println("Processing field: ${it.name} on thread ${Thread.currentThread().name}")
+            return@map when (it.name) {
                 "_and" -> {
                     val andPredicates = it.value as? ArrayValue
-                    andPredicates?.values?.map { innerValue ->
+                        ?: throw IllegalArgumentException("Expected _and to be an array")
+                    println("AND: ${andPredicates.values}")
+
+                    listOf(
                         builder.and(
-                            gqlWherePredicatesToRexNodePredicates(
-                                builder,
-                                innerValue as ObjectValue
-                            )
+                            andPredicates.values.flatMap { innerValue ->
+                                recursiveGQLWherePredicatesToRexNodePredicates(
+                                    builder,
+                                    innerValue as ObjectValue
+                                )
+                            }
                         )
-                    } ?: emptyList()
+                    )
                 }
                 "_or" -> {
                     val orPredicates = it.value as? ArrayValue
-                    orPredicates?.values?.map { innerValue ->
+                        ?: throw IllegalArgumentException("Expected _or to be an array")
+                    println("OR: ${orPredicates.values}")
+                    listOf(
                         builder.or(
-                            gqlWherePredicatesToRexNodePredicates(
-                                builder,
-                                innerValue as ObjectValue
-                            )
+                            orPredicates.values.flatMap { innerValue ->
+                                recursiveGQLWherePredicatesToRexNodePredicates(
+                                    builder,
+                                    innerValue as ObjectValue
+                                )
+                            }
                         )
-                    } ?: emptyList()
+                    )
                 }
                 "_not" -> {
                     val notPredicate = it.value as? ObjectValue
+                        ?: throw IllegalArgumentException("Expected _not to be an object")
                     listOf(
                         builder.not(
-                            gqlWherePredicatesToRexNodePredicates(
+                            recursiveGQLWherePredicatesToRexNodePredicates(
                                 builder,
-                                notPredicate!!
-                            )[0]
+                                notPredicate
+                            ).first()
                         )
                     )
                 }
                 else -> {
-                    return rexNodes(it, builder)
+                    toRexNodes(it, builder)
                 }
             }
-        }
+        }.toList().flatten()
     }
 
-    private fun rexNodes(
+    private fun toRexNodes(
         it: ObjectField,
         builder: RelBuilder
     ): List<RexNode> {
-        val property = it.name
-        val firstField: ObjectField? = (it.value as? ObjectValue)?.objectFields?.first()
-        val value = firstField?.value ?: throw IllegalArgumentException("Value is null")
-        val predicate = firstField.name?.let(ComparisonOperator.Companion::fromValue)
-        if (predicate != null) {
-            return listOf(
-                builder.call(
-                    predicate.sqlOperator,
-                    builder.field(property),
-                    graphqlObjectValueToRexLiteralValue(builder, value)
-                )
+        val firstField: ObjectField = (it.value as? ObjectValue)?.objectFields?.first()
+            ?: throw IllegalArgumentException("Expected first field")
+        val value = firstField.value
+            ?: throw IllegalArgumentException("Value is null")
+        val predicate = firstField.name.let(ComparisonOperator.Companion::fromValue)
+        return listOf(
+            builder.call(
+                predicate.sqlOperator,
+                builder.field(it.name),
+                graphqlObjectValueToRexLiteralValue(builder, value)
             )
-        }
-        throw IllegalArgumentException("Unsupported comparison expression")
+        )
     }
 
     fun calciteSchemaToGraphQLSchema(calciteSchema: Schema): GraphQLSchema {
@@ -365,12 +393,8 @@ fun schemaToRelOptSchema(schema: Schema): RelOptSchema {
     return object : RelOptSchema {
         override fun getTableForMember(names: MutableList<String>): RelOptTable? {
             val fullyQualifiedTableName = names.joinToString(".")
-            val table = schema.getTable(fullyQualifiedTableName)
-            return if (table != null) {
-                RelOptTableImpl.create(this, table.getRowType(dataTypeFactory), table, ImmutableList.copyOf(names))
-            } else {
-                null
-            }
+            val table = schema.getTable(fullyQualifiedTableName) ?: return null
+            return RelOptTableImpl.create(this, table.getRowType(dataTypeFactory), table, ImmutableList.copyOf(names))
         }
 
         override fun getTypeFactory(): RelDataTypeFactory {
@@ -378,6 +402,7 @@ fun schemaToRelOptSchema(schema: Schema): RelOptSchema {
         }
 
         override fun registerRules(planner: RelOptPlanner) {
+            return
         }
     }
 }
@@ -432,46 +457,69 @@ object ExampleKotlin {
         SELECT
             empid, name, salary, deptno, commission
         FROM
-            emp
+            emps
         WHERE
             deptno = 20
             AND
                 (salary > 8000 AND salary < 10000)
             AND
-                name = 'Eric' OR commission = 10
+                (name = 'Eric' OR commission = 10)
     """
 
     private const val graphqlQuery = """
-            query {
-                emps(
-                    where: {
-                        _and: [
-                            { deptno: { _eq: 20 } }
-                            {
-                                _and: [
-                                    { salary: { _gte: 8000 } },
-                                    { salary: { _lte: 10000 } }
-                                ]
-                            }
-                        ],
-                        _or: [
-                            { name: { _eq: "Eric" } },
-                            { commission: { _eq: 10 } }
-                        ]
-                    }
-                ) {
-                       empid
-                       deptno
-                       name
-                       salary
-                       commission
+        query {
+            emps(
+                where: {
+                    _and: [
+                        { deptno: { _eq: 20 } }
+                        {
+                            _and: [
+                                { salary: { _gte: 8000 } },
+                                { salary: { _lte: 10000 } }
+                            ]
+                        }
+                    ],
+                    _or: [
+                        { name: { _eq: "Eric" } },
+                        { commission: { _eq: 10 } }
+                    ]
                 }
+            ) {
+                   empid
+                   deptno
+                   name
+                   salary
+                   commission
             }
+        }
         """
+
+    fun testSqlQuery() {
+        println("Testing Calcite plan for SQL query:")
+        println(sqlQuery)
+
+        val frameworkConfig: FrameworkConfig = Frameworks
+            .newConfigBuilder()
+            .parserConfig(
+                // Need to set case-sensitive to false, or else it tries to look up capitalized table names and fails
+                // IE: "EMPS" instead of "emps"
+                SqlParser
+                    .config()
+                    .withCaseSensitive(false)
+            )
+            .defaultSchema(
+                Frameworks
+                    .createRootSchema(true)
+                    .add("hr", HrClusteredSchemaKotlin())
+            )
+            .build()
+
+        executeQuery(frameworkConfig, sqlQuery, true)
+    }
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val rootSchema = HrClusteredSchemaKotlin()
+        val rootSchema: AbstractSchema = HrClusteredSchemaKotlin()
         println(rootSchema)
 
         val graphqlSchema: GraphQLSchema = CalciteGraphQLUtils.calciteSchemaToGraphQLSchema(rootSchema)
@@ -500,48 +548,43 @@ object ExampleKotlin {
 
         for (node in topLevelQueryNodes) {
             for (selection in node.selectionSet.selections.filterIsInstance<Field>()) {
-                val whereArgument: Argument? = selection.arguments.find { it.name == "where" }
-                if (whereArgument != null) {
-                    val whereArgumentValue = whereArgument.value as? ObjectValue
-                    val whereArgumentFields: MutableList<ObjectField>? = whereArgumentValue?.objectFields
+                val whereArgument: Argument = selection.arguments.find { it.name == "where" } ?: continue
 
-                    if (whereArgumentValue != null) {
-                        relBuilder
-                            .scan(selection.name)
-                            .filter(
-                                CalciteGraphQLUtils.gqlWherePredicatesToRexNodePredicates(
-                                    relBuilder,
-                                    whereArgumentValue
-                                )
-                            )
-                            .project(
-                                relBuilder.field("empid"),
-                                relBuilder.field("name"),
-                            )
+                val whereArgumentValue = whereArgument.value as ObjectValue
+                val whereArgumentFields: MutableList<ObjectField> = whereArgumentValue.objectFields
 
-                        println("RelBuilder result: ")
-                        println(relBuilder.toString())
+                relBuilder
+                    .scan(selection.name)
+                    .filter(
+                        CalciteGraphQLUtils.recursiveGQLWherePredicatesToRexNodePredicates(
+                            relBuilder,
+                            whereArgumentValue
+                        )
+                    )
+                    .project(
+                        relBuilder.field("empid"),
+                        relBuilder.field("name"),
+                    )
 
-                        val relRoot: RelNode = relBuilder.build()
-                        println("relRoot:")
-                        println(relRoot.toString())
+                println("RelBuilder result: ")
+                println(relBuilder.toString())
 
-                        planner.root = relRoot
-                        println(viz.jsonStringResult)
+                val relRoot: RelNode = relBuilder.build()
+                val dialect = CalciteSqlDialect.DEFAULT
+                val converter = RelToSqlConverter(dialect)
+                val sqlNode = converter.visitRoot(relRoot).asStatement()
+                println("RelToSqlConverter result: ")
+                println(sqlNode.toSqlString(dialect))
 
-                        val printWriter = PrintWriter(System.out, true)
-                        println("printWriter:")
-                        println(printWriter)
+                planner.root = relRoot
+                println(viz.jsonStringResult)
 
-                        println("about to dump")
-                        planner.dump(printWriter)
-                        println("done dumping")
+                val printWriter = PrintWriter(System.out, true)
+                planner.dump(printWriter)
 
-                        val planned = planner.findBestExp()
-                        println("Planner result: ")
-                        println(planned)
-                    }
-                }
+                val planned = planner.findBestExp()
+                println("Planner result: ")
+                println(planned)
             }
         }
     }

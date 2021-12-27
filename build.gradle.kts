@@ -30,6 +30,19 @@ java {
     }
 }
 
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+}
+
 qodana {
     showReportPort.set(8888)
 }
