@@ -1,14 +1,10 @@
-import net.bnb1.kradle.blueprints.JavaBlueprint
-
 plugins {
-    id("java")
-
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     id("org.jetbrains.qodana") version "0.1.12"
     id("org.jetbrains.kotlinx.kover") version "0.4.4"
 
     // https://github.com/mrkuz/kradle
-    id("net.bitsandbobs.kradle-app") version "1.2.0"
+    id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
 group = "com.example"
@@ -30,36 +26,42 @@ java {
     }
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
-    }
-}
-
 qodana {
     showReportPort.set(8888)
 }
 
 kradle {
-    // Disable Java blueprint to be able to use "toolchains" instead
-    disable(JavaBlueprint::class.java)
-    mainClass("com.example.ExampleKotlin")
-    kotlinxCoroutinesVersion("1.6.0-RC2")
-    ktlintVersion("0.43.2")
-    detektVersion("1.19.0")
-    jmhVersion("1.32")
-    tests {
-        junitJupiterVersion("5.8.2")
-        jacocoVersion("0.8.7")
-        useKotest("5.0.2")
-        useMockk("1.12.1")
+    kotlinJvmApplication {
+        jvm {
+            application {
+                mainClass("ExampleKotlin")
+            }
+
+            /*
+            // These are the defaults anyway
+            targetJvm("17")
+            kotlin {
+                useCoroutines("1.6.0")
+                lint {
+                    ktlintVersion("0.43.2")
+                }
+                codeAnalysis {
+                    detektVersion("1.19.0")
+                }
+                test {
+                    useKotest("5.0.3")
+                    useMockk("1.12.2")
+                }
+            }
+            benchmark {
+                jmhVersion("1.32")
+            }
+            test {
+                withJunitJupiter("5.8.2")
+                withJacoco("0.8.7")
+            }
+            */
+        }
     }
 }
 
@@ -80,8 +82,4 @@ dependencies {
     compileOnly("org.immutables:value:2.8.8")
 
     implementation("com.graphql-java:graphql-java:17.3")
-}
-
-tasks.named<Test>("test") {
-    useJUnitPlatform()
 }
