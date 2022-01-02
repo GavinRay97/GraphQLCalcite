@@ -28,6 +28,8 @@ object Application {
             """
         query {
           EMP(
+            limit: 2,
+            offset: 1,
             where: {
               _or: [
                 { DEPTNO: { _eq: 20 } },
@@ -93,6 +95,7 @@ object Application {
 
                     for (operation in queryParseResult.document.queryOperations()) {
                         for (tableQuery in tableQueryFromGQLQueryOperation(operation)) {
+                            println(tableQuery.prettyPrint())
 
                             val relRoot: RelNode = tableQuery.toRelNode(relBuilder)
                             val sqlNode = RelToSqlConverter(dialect).visitRoot(relRoot).asStatement()

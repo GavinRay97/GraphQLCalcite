@@ -3,8 +3,8 @@
 - [Apache Calcite <-> Distributed, Federated GraphQL API](#apache-calcite---distributed-federated-graphql-api)
 - [Goals](#goals)
 - [Roadmap and Current Progress](#roadmap-and-current-progress)
-  - [The Roadmap](#the-roadmap)
-  - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
+    - [The Roadmap](#the-roadmap)
+    - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
 - [Related Projects and Reference Material](#related-projects-and-reference-material)
 
 This repo contains a work-in-progress prototype and research project on using Apache Calcite as the backbone of GraphQL
@@ -51,8 +51,8 @@ expression, then executed against the Calcite adapter giving the proper results.
     - [x] Generate `where` boolean expression type to allow filtering
 - [x] Convert a GraphQL query AST into matching Calcite Relational Algebra expression (`RelNode`) for the table
     - [x] Where (critical/most important)
-    - [ ] Limit
-    - [ ] Offset
+    - [x] Limit
+    - [x] Offset
     - [ ] Distinct
     - [ ] Group By/Aggregations (nice to have)
 - [x] Execute the converted Relational Algebra expression against data source, returning correct results
@@ -112,6 +112,8 @@ Now, if we write a GraphQL query against this generated schema, something like b
 ```graphql
 query {
     EMP(
+        limit: 2,
+        offset: 1,
         where: {
             _or: [
                 { DEPTNO: { _eq: 20 } },
@@ -121,14 +123,14 @@ query {
                 { SAL: { _gte: 1500 } }
                 {
                     _or: [
-                        { JOB: { _eq: "CLERK" } },
+                        { JOB: { _eq: "SALESMAN" } },
                         { JOB: { _eq: "MANAGER" } }
                     ]
                 }
             ]
         }
     ) {
-        ...columns
+        ... columns
     }
 }
 ```
@@ -138,17 +140,20 @@ of planning:
 
 ```
 -- Logical Plan
-LogicalFilter(condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
-  JdbcTableScan(table=[[JDBC_SCOTT, EMP]])
+LogicalSort(offset=[1], fetch=[2])
+  LogicalFilter(condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
+    JdbcTableScan(table=[[JDBC_SCOTT, EMP]])
 
 -- Mid Plan
-LogicalFilter(subset=[rel#6:RelSubset#1.ENUMERABLE.[]], condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
-  JdbcTableScan(subset=[rel#3:RelSubset#0.JDBC.JDBC_SCOTT.[]], table=[[JDBC_SCOTT, EMP]])
+LogicalSort(subset=[rel#9:RelSubset#2.ENUMERABLE.[]], offset=[1], fetch=[2])
+  LogicalFilter(subset=[rel#6:RelSubset#1.NONE.[]], condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
+    JdbcTableScan(subset=[rel#4:RelSubset#0.JDBC.JDBC_SCOTT.[]], table=[[JDBC_SCOTT, EMP]])
 
 -- Best Plan
-JdbcToEnumerableConverter
-  JdbcFilter(condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
-    JdbcTableScan(table=[[JDBC_SCOTT, EMP]])
+EnumerableLimit(offset=[1], fetch=[2])
+  JdbcToEnumerableConverter
+    JdbcFilter(condition=[AND(SEARCH($7, Sarg[20, 30]), >=($5, 1500), SEARCH($2, Sarg['MANAGER':CHAR(8), 'SALESMAN']:CHAR(8)))])
+      JdbcTableScan(table=[[JDBC_SCOTT, EMP]])
 ```
 
 And here is the relational expression built out of the GraphQL query, represented as a (simplified + optimized) SQL
@@ -160,6 +165,7 @@ FROM "SCOTT"."EMP"
 WHERE "DEPTNO" IN (20, 30)
   AND "SAL" >= 1500
   AND "JOB" IN ('MANAGER', 'SALESMAN')
+OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY
 ```
 
 And finally, the results of our query:
