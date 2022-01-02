@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SPLITTER_PROPORTION" value="0.47626114" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="98cd0e22-f621-443b-9fc2-3dcfa4b803dc" name="Changes" comment="Fixes">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Application.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/ktlint.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/ktlint.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ExampleKotlin.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/HrClusteredSchemaKotlin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/HrClusteredSchemaKotlin.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightSettings">
+    <option name="OPTIMIZE_IMPORTS_ON_THE_FLY" value="true" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="benchmark" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0-SNAPSHOT/fe6b4100e3f49ceab1cc26d0a79ce5fb973c4d6b/calcite-core-1.29.0-SNAPSHOT-sources.jar!/org/apache/calcite/schema/SchemaFactory.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ghostdogpr/caliban_3/1.3.0/333e6e4e817774e2f25c68250877392cffe09640/caliban_3-1.3.0-sources.jar!/caliban/schema/Schema.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite.avatica/avatica-core/1.20.0/a8015f4b15176e9b974f3d30ecc6dc5d02a4268f/avatica-core-1.20.0-sources.jar!/org/apache/calcite/avatica/Helper.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/Example.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$PROJECT_DIR$/../../../../Program Files/Eclipse Adoptium/jdk-17.0.1.12-hotspot/lib/src.zip!/java.base/java/lang/NullPointerException.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0-SNAPSHOT/229f33bc866ed491290df795cfa2aaa32f6113d9/calcite-core-1.29.0-SNAPSHOT-sources.jar!/org/apache/calcite/sql/type/SqlTypeName.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite.avatica/avatica-core/1.20.0/a8015f4b15176e9b974f3d30ecc6dc5d02a4268f/avatica-core-1.20.0-sources.jar!/org/apache/calcite/avatica/AvaticaPreparedStatement.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite.avatica/avatica-core/1.20.0/a8015f4b15176e9b974f3d30ecc6dc5d02a4268f/avatica-core-1.20.0-sources.jar!/org/apache/calcite/avatica/AvaticaConnection.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0-SNAPSHOT/fe6b4100e3f49ceab1cc26d0a79ce5fb973c4d6b/calcite-core-1.29.0-SNAPSHOT-sources.jar!/org/apache/calcite/jdbc/CalciteConnectionImpl.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0-SNAPSHOT/fe6b4100e3f49ceab1cc26d0a79ce5fb973c4d6b/calcite-core-1.29.0-SNAPSHOT-sources.jar!/org/apache/calcite/tools/RelRunners.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0-SNAPSHOT/fe6b4100e3f49ceab1cc26d0a79ce5fb973c4d6b/calcite-core-1.29.0-SNAPSHOT-sources.jar!/org/apache/calcite/tools/RelRunner.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0/f4c614ae9dd7088338247df7c669b71aa9b1fe5d/calcite-core-1.29.0-sources.jar!/org/apache/calcite/rex/RexUtil.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ghostdogpr/caliban_3/1.3.0/333e6e4e817774e2f25c68250877392cffe09640/caliban_3-1.3.0-sources.jar!/caliban/schema/Types.scala" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="21w8KqezAn0gdHzaS7LFOeH0wfk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="code.cleanup.on.save" value="true" />
+    <property name="jdk.selected.JAVA_MODULE" value="temurin-17" />
+    <property name="last_opened_file_path" value="//wsl$/Ubuntu-CommPrev/home/user/projects/hasura-jwt-blogpost" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.3873563" />
+    <property name="run.code.analysis.last.selected.profile" value="pktlint" />
+    <property name="scala_project_settings_configurable.last_selected_tab_index" value="0" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu-CommPrev\home\user\projects\GraphQLCalcite\src\main\java" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Kotlin.Application">
+    <configuration name="Example" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Example" />
+      <module name="GraphQLCalcite.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GraphQLCalcite [benchmarkBenchmarkCompile]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="benchmarkBenchmarkCompile" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GraphQLCalcite [benchmarkBenchmark]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="benchmarkBenchmark" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GraphQLCalcite [benchmark]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="benchmark" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Application" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Application" />
+      <module name="GraphQLCalcite.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.Application" />
+        <item itemvalue="Gradle.GraphQLCalcite [benchmark]" />
+        <item itemvalue="Gradle.GraphQLCalcite [benchmarkBenchmarkCompile]" />
+        <item itemvalue="Gradle.GraphQLCalcite [benchmarkBenchmark]" />
+        <item itemvalue="Application.Example" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ScalaProjectSettings">
+    <option name="scala3DisclaimerShown" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="StandaloneScriptsStorage">
+    <option name="files">
+      <set>
+        <option value="$PROJECT_DIR$/build.gradle.kts" />
+      </set>
+    </option>
+  </component>
+  <component name="StructuralSearchPlugin">
+    <replaceConfiguration name="Elvis operators" created="1640980862398" text="$Expr$ ?: throw IllegalArgumentException($msg$)" recursive="false" caseInsensitive="false" type="Kotlin" pattern_context="default" scope_type="PROJECT" scope_descriptor="" reformatAccordingToStyle="false" shortenFQN="false" replacement="requireNotNull($Expr$) { $msg$ }" history="1">
+      <constraint name="__context__" within="" contains="" />
+      <constraint name="Expr" within="" contains="" />
+      <constraint name="msg" within="" contains="" />
+    </replaceConfiguration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="98cd0e22-f621-443b-9fc2-3dcfa4b803dc" name="Changes" comment="" />
+      <created>1638840733518</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1638840733518</updated>
+      <workItem from="1638840734865" duration="6112000" />
+      <workItem from="1639160745904" duration="639000" />
+      <workItem from="1639340648320" duration="11372000" />
+      <workItem from="1639360302458" duration="2323000" />
+      <workItem from="1639362665940" duration="8203000" />
+      <workItem from="1639429648082" duration="190000" />
+      <workItem from="1639429855162" duration="19000" />
+      <workItem from="1639429887603" duration="6711000" />
+      <workItem from="1639436756159" duration="17405000" />
+      <workItem from="1639709009513" duration="2555000" />
+      <workItem from="1639766692585" duration="61000" />
+      <workItem from="1639850328366" duration="9000" />
+      <workItem from="1639862430803" duration="44000" />
+      <workItem from="1639862493643" duration="204000" />
+      <workItem from="1639862713066" duration="42000" />
+      <workItem from="1639862767460" duration="764000" />
+      <workItem from="1639864326323" duration="1705000" />
+      <workItem from="1639866055109" duration="19395000" />
+      <workItem from="1639934479720" duration="13020000" />
+      <workItem from="1640036923059" duration="26000" />
+      <workItem from="1640036962101" duration="29005000" />
+      <workItem from="1640137269692" duration="882000" />
+      <workItem from="1640138728898" duration="7606000" />
+      <workItem from="1640189675154" duration="5198000" />
+      <workItem from="1640375140282" duration="15000" />
+      <workItem from="1640375536389" duration="28000" />
+      <workItem from="1640466802412" duration="9685000" />
+      <workItem from="1640577031040" duration="1000" />
+      <workItem from="1640577172702" duration="15000" />
+      <workItem from="1640577527425" duration="76000" />
+      <workItem from="1640577957528" duration="25000" />
+      <workItem from="1640577995042" duration="27000" />
+      <workItem from="1640617694036" duration="26970000" />
+      <workItem from="1640713542759" duration="40000" />
+      <workItem from="1640827541729" duration="9994000" />
+      <workItem from="1640884897676" duration="21172000" />
+      <workItem from="1640974703708" duration="42196000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit">
+      <created>1640126196907</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1640126196907</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Cleanup">
+      <created>1640131096748</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1640131096748</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Cleanup">
+      <created>1640135691020</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1640135691020</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Cleanup">
+      <created>1640192126376</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1640192126376</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fixes">
+      <created>1640647318675</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1640647318675</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="Cleanup" />
+    <MESSAGE value="Fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0/f4c614ae9dd7088338247df7c669b71aa9b1fe5d/calcite-core-1.29.0-sources.jar!/org/apache/calcite/jdbc/CalciteSchema.java</url>
+          <line>262</line>
+          <properties class="org.apache.calcite.jdbc.CalciteSchema" method="getSubSchema">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0/f4c614ae9dd7088338247df7c669b71aa9b1fe5d/calcite-core-1.29.0-sources.jar!/org/apache/calcite/sql/validate/SqlValidatorUtil.java</url>
+          <line>1037</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0/f4c614ae9dd7088338247df7c669b71aa9b1fe5d/calcite-core-1.29.0-sources.jar!/org/apache/calcite/sql/validate/SqlValidatorUtil.java</url>
+          <line>1040</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.calcite/calcite-core/1.29.0/f4c614ae9dd7088338247df7c669b71aa9b1fe5d/calcite-core-1.29.0-sources.jar!/org/apache/calcite/sql/validate/SqlValidatorUtil.java</url>
+          <line>1043</line>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.apache.calcite.rel.type.RelDataTypeFieldImpl" memberName="value" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

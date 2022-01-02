@@ -1,0 +1,106 @@
+type Query {
+    depts(limit: Int, offset: Int, order_by: [String], where: depts_bool_exp): depts
+    emps(limit: Int, offset: Int, order_by: [String], where: emps_bool_exp): emps
+}
+
+type depts {
+    deptno: Float
+    name: String
+}
+
+type emps {
+    commission: Float
+    deptno: Float
+    empid: Float
+    name: String
+    salary: Float
+}
+
+"Boolean expression to compare columns of type \"Float\". All fields are combined with logical 'AND'."
+input Float_comparison_exp {
+    _eq: Float
+    _gt: Float
+    _gte: Float
+    _in: [Float!]
+    _lt: Float
+    _lte: Float
+    _ne: Float
+    _nin: [Float!]
+}
+
+"Boolean expression to compare columns of type \"String\". All fields are combined with logical 'AND'."
+input String_comparison_exp {
+    _eq: String
+    _gt: String
+    _gte: String
+    "does the column match the given case-insensitive pattern"
+    _ilike: String
+    _in: [String!]
+    "does the column match the given case-insensitive regular expression"
+    _iregex: String
+    "does the column match the given pattern"
+    _like: String
+    _lt: String
+    _lte: String
+    _ne: String
+    "does the column NOT match the given case-insensitive pattern"
+    _nilike: String
+    _nin: [String!]
+    "does the column NOT match the given case-insensitive regular expression"
+    _niregex: String
+    "does the column NOT match the given pattern"
+    _nlike: String
+    "does the column NOT match the given regular expression"
+    _nregex: String
+    "does the column NOT match the given SQL regular expression"
+    _nsimilar: String
+    "does the column match the given regular expression"
+    _regex: String
+    "does the column match the given SQL regular expression"
+    _similar: String
+}
+
+input depts_bool_exp {
+    _and: [depts_bool_exp!]
+    _not: depts_bool_exp
+    _or: [depts_bool_exp!]
+    deptno: Float_comparison_exp
+    name: String_comparison_exp
+}
+
+input emps_bool_exp {
+    _and: [emps_bool_exp!]
+    _not: emps_bool_exp
+    _or: [emps_bool_exp!]
+    commission: Float_comparison_exp
+    deptno: Float_comparison_exp
+    empid: Float_comparison_exp
+    name: String_comparison_exp
+    salary: Float_comparison_exp
+}
+
+# ORINOCO
+
+
+
+type ORDERS {
+    ID: Float
+    PRODUCT: String
+    ROWTIME: String
+    UNITS: Float
+}
+
+extend type Query {
+    ORDERS(limit: Int, offset: Int, order_by: String, where: ORDERS_bool_exp): ORDERS
+}
+
+
+input ORDERS_bool_exp {
+    ID: Float_comparison_exp
+    PRODUCT: String_comparison_exp
+    ROWTIME: String_comparison_exp
+    UNITS: Float_comparison_exp
+    _and: [ORDERS_bool_exp!]
+    _not: ORDERS_bool_exp
+    _or: [ORDERS_bool_exp!]
+}

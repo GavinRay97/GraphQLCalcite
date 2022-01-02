@@ -65,21 +65,48 @@ kradle {
     }
 }
 
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("--enable-preview")
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-opt-in=kotlin.RequiresOptIn",
+            "-Xabi-stability=stable",
+            "-Xassertions=jvm",
+            "-Xenhance-type-parameter-types-to-def-not-null",
+            "-Xjsr305=strict",
+            "-Xjvm-default=all",
+            "-Xlambdas=indy",
+            "-Xparallel-backend-threads=0",
+            "-Xsam-conversions=indy",
+            "-Xstrict-java-nullability-assertions",
+            "-Xtype-enhancement-improvements-strict-mode",
+            "-Xuse-fast-jar-file-system",
+            "-Xeffect-system",
+            "-Xenable-builder-inference",
+            "-Xexpect-actual-linker",
+            "-Xextended-compiler-checks",
+            // "-Xinference-compatibility",
+            "-Xinline-classes",
+            "-Xnew-inference",
+            "-Xpolymorphic-signature",
+            "-Xread-deserialized-contracts",
+            "-Xself-upper-bound-inference",
+            "-Xunrestricted-builder-inference",
+            "-Xuse-fir",
+            "-Xuse-fir-extended-checkers",
+        )
+    }
 }
 
-tasks.withType<Test> {
-    jvmArgs("--enable-preview")
-}
-
-tasks.withType<JavaExec> {
-    jvmArgs("--enable-preview")
+object Versions {
+    const val calcite = "1.29.0"
 }
 
 dependencies {
-    implementation("org.apache.calcite:calcite-core:1.29.0-SNAPSHOT")
-    compileOnly("org.immutables:value:2.8.8")
-
     implementation("com.graphql-java:graphql-java:17.3")
+    implementation("org.apache.calcite:calcite-core:${Versions.calcite}")
+    implementation("org.apache.calcite:calcite-testkit:${Versions.calcite}")
+    // Use 2.4.1 to remain compatible with Calcite
+    implementation("org.hsqldb:hsqldb:2.4.1")
+
+    compileOnly("org.immutables:value:2.8.8")
 }

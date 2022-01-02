@@ -1,9 +1,16 @@
 rootProject.name = "GraphQLCalcite"
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
 // Awful hack in settings.grade to reflectively enable logging
 // See: https://youtrack.jetbrains.com/issue/IDEA-191119
 // See: https://github.com/gradle/gradle/issues/19340
-val LOG_LEVEL = LogLevel.DEBUG
+val LOG_LEVEL = LogLevel.INFO
 setGradleLogLevelReflectively(LOG_LEVEL)
 
 fun setGradleLogLevelReflectively(logLevel: LogLevel) {

@@ -1,0 +1,122 @@
+type BONUS {
+    COMM: Float
+    ENAME: String
+    JOB: String
+    SAL: Float
+}
+
+type DEPT {
+    DEPTNO: Float
+    DNAME: String
+    LOC: String
+}
+
+type EMP {
+    COMM: Float
+    DEPTNO: Float
+    EMPNO: Float
+    ENAME: String
+    HIREDATE: String
+    JOB: String
+    MGR: Float
+    SAL: Float
+}
+
+type Query {
+    BONUS(limit: Int, offset: Int, order_by: String, where: BONUS_bool_exp): BONUS
+    DEPT(limit: Int, offset: Int, order_by: String, where: DEPT_bool_exp): DEPT
+    EMP(limit: Int, offset: Int, order_by: String, where: EMP_bool_exp): EMP
+    SALGRADE(limit: Int, offset: Int, order_by: String, where: SALGRADE_bool_exp): SALGRADE
+}
+
+type SALGRADE {
+    GRADE: Float
+    HISAL: Float
+    LOSAL: Float
+}
+
+input BONUS_bool_exp {
+    COMM: Float_comparison_exp
+    ENAME: String_comparison_exp
+    JOB: String_comparison_exp
+    SAL: Float_comparison_exp
+    _and: [BONUS_bool_exp!]
+    _not: BONUS_bool_exp
+    _or: [BONUS_bool_exp!]
+}
+
+input DEPT_bool_exp {
+    DEPTNO: Float_comparison_exp
+    DNAME: String_comparison_exp
+    LOC: String_comparison_exp
+    _and: [DEPT_bool_exp!]
+    _not: DEPT_bool_exp
+    _or: [DEPT_bool_exp!]
+}
+
+input EMP_bool_exp {
+    COMM: Float_comparison_exp
+    DEPTNO: Float_comparison_exp
+    EMPNO: Float_comparison_exp
+    ENAME: String_comparison_exp
+    HIREDATE: String_comparison_exp
+    JOB: String_comparison_exp
+    MGR: Float_comparison_exp
+    SAL: Float_comparison_exp
+    _and: [EMP_bool_exp!]
+    _not: EMP_bool_exp
+    _or: [EMP_bool_exp!]
+}
+
+"Boolean expression to compare columns of type \"Float\". All fields are combined with logical 'AND'."
+input Float_comparison_exp {
+    _eq: Float
+    _gt: Float
+    _gte: Float
+    _in: [Float!]
+    _lt: Float
+    _lte: Float
+    _ne: Float
+    _nin: [Float!]
+}
+
+input SALGRADE_bool_exp {
+    GRADE: Float_comparison_exp
+    HISAL: Float_comparison_exp
+    LOSAL: Float_comparison_exp
+    _and: [SALGRADE_bool_exp!]
+    _not: SALGRADE_bool_exp
+    _or: [SALGRADE_bool_exp!]
+}
+
+"Boolean expression to compare columns of type \"String\". All fields are combined with logical 'AND'."
+input String_comparison_exp {
+    _eq: String
+    _gt: String
+    _gte: String
+    "does the column match the given case-insensitive pattern"
+    _ilike: String
+    _in: [String!]
+    "does the column match the given case-insensitive regular expression"
+    _iregex: String
+    "does the column match the given pattern"
+    _like: String
+    _lt: String
+    _lte: String
+    _ne: String
+    "does the column NOT match the given case-insensitive pattern"
+    _nilike: String
+    _nin: [String!]
+    "does the column NOT match the given case-insensitive regular expression"
+    _niregex: String
+    "does the column NOT match the given pattern"
+    _nlike: String
+    "does the column NOT match the given regular expression"
+    _nregex: String
+    "does the column NOT match the given SQL regular expression"
+    _nsimilar: String
+    "does the column match the given regular expression"
+    _regex: String
+    "does the column match the given SQL regular expression"
+    _similar: String
+}
