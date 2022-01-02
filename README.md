@@ -3,8 +3,11 @@
 - [Apache Calcite <-> Distributed, Federated GraphQL API](#apache-calcite---distributed-federated-graphql-api)
 - [Goals](#goals)
 - [Roadmap and Current Progress](#roadmap-and-current-progress)
-    - [The Roadmap](#the-roadmap)
-    - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
+  - [The Roadmap](#the-roadmap)
+  - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
+- [Technical Architecture](#technical-architecture)
+  - [Approach and Design](#approach-and-design)
+  - [Why Kotlin](#why-kotlin)
 - [Related Projects and Reference Material](#related-projects-and-reference-material)
 
 This repo contains a work-in-progress prototype and research project on using Apache Calcite as the backbone of GraphQL
@@ -183,6 +186,68 @@ We can use Calcite's query plan visualizer to understand what's going on:
 
 There is still much left to prove out, but hopefully this should give some insight as to "what the heck is it you're
 trying to build"?
+
+# Technical Architecture
+
+## Approach and Design
+
+The high level approach that has been pursued here can be broken down by some explanatory images.
+
+> Note: These images are taken from [Stamatis Zampetakis](http://people.apache.org/~zabetak/) fantastic presentation on YouTube
+>
+> [_"An introduction to query processing & Apache Calcite"_](https://www.youtube.com/watch?v=p1O3E33FIs8)
+
+The following image gives a high-level overview of the pieces of most query processors:
+
+![query-processor-general-architecture](./readme-images/calcite-query-processor-architecture.png)
+
+Below, we can see how these high-level pieces map to Calcite's API classes and interfaces, as well as the boundaries
+between the "core" pieces, and which pieces are open to being written by developers as extensions.
+
+Circled in blue are the two areas we are most interested in:
+
+- The region depicting the `SqlParser` and `SqlToRelConverter` shows how regular SQL queries are converted/translated
+  into Relational Algebra expressions. We should in theory (and in practice) be able to do a similar thing to convert
+  GraphQL queries into relational expressions.
+- The region on the righthand side, containing `Schema` and `CatalogReader` have been circled to call attention to how
+  the Server's GraphQL API is auto-generated. We can ask Calcite to give us the Schema for any of it's data sources, and
+  we are able to use the metadata from it to generate GraphQL types and resolvers.
+
+![query-processor-calcite-interfaces](./readme-images/calcite-query-processor-graphql-architecture.png)
+
+With these pieces in place, you can see below how rather than SQL query, we might be able to write a GraphQL query with
+identical semantics, and continue using Calcite as though we were a "plain-old SQL query"
+
+![sql-query-to-calcite-ast-example](./readme-images/graphql-query-to-relnode.png)
+
+Some restrictions and assumptions made about the shape of the GraphQL API and corresponding queries, and this is what
+lets this entire thing be possible.
+
+IE, the generated GraphQL schema operations only allow queries which have behaviors/semantics that can be mapped 1-to-1
+to SQL.
+
+With this, we can restrict the "domain" of GraphQL to the "domain" of standard SQL, and then our work is just one of
+writing the facades/conversions.
+
+This is a 10,000ft view of the technical architecture and approach taken to the problem in this project. For details,
+see code.
+
+## Why Kotlin
+
+This project is written in Kotlin.
+
+If you were to check the commit history, you would find that there were, at one point, functioning prototypes in both
+Java and Scala 3 too.
+
+Ultimately, Kotlin struck the best balance between language features and tooling + support + ecosystem. It is an
+incredibly productive and pragmatic language.
+
+This project is performance-critical, and benchmarks showed that the latest Kotlin (1.6.10) is competitive with the
+latest Java (JDK 17) in terms of performance, and in some cases idiomatic code would perform somewhat better than the
+Java equivalent.
+
+If further developments show negative performance impact from using a language other than Java, I will rewrite it all in
+Java.
 
 # Related Projects and Reference Material
 
