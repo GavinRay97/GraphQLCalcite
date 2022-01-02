@@ -14,7 +14,6 @@ import org.apache.calcite.schema.Table
 import org.apache.calcite.schema.impl.AbstractSchema
 import org.apache.calcite.schema.impl.AbstractTable
 import org.apache.calcite.util.ImmutableBitSet
-import java.util.*
 import java.util.function.Function
 
 /**
@@ -22,50 +21,46 @@ import java.util.function.Function
  * ordered based on their primary keys representing clustered tables.
  */
 class HrClusteredSchemaKotlin : AbstractSchema() {
-    private val tables: ImmutableMap<String, Table>
-
-    init {
-        tables = ImmutableMap.builder<String, Table>()
-            .put(
-                "emps",
-                PkClusteredTable(
-                    { factory: RelDataTypeFactory ->
-                        RelDataTypeFactory.Builder(factory)
-                            .add("empid", factory.createJavaType(Int::class.javaPrimitiveType))
-                            .add("deptno", factory.createJavaType(Int::class.javaPrimitiveType))
-                            .add("name", factory.createJavaType(String::class.java))
-                            .add("salary", factory.createJavaType(Int::class.javaPrimitiveType))
-                            .add("commission", factory.createJavaType(Int::class.java))
-                            .build()
-                    },
-                    ImmutableBitSet.of(0),
-                    Arrays.asList(
-                        arrayOf(100, 10, "Bill", 10000, 1000),
-                        arrayOf(110, 10, "Theodore", 11500, 250),
-                        arrayOf(150, 10, "Sebastian", 7000, null),
-                        arrayOf(200, 20, "Eric", 8000, 500)
-                    )
+    private val tables: ImmutableMap<String, Table> = ImmutableMap.builder<String, Table>()
+        .put(
+            "emps",
+            PkClusteredTable(
+                { factory: RelDataTypeFactory ->
+                    RelDataTypeFactory.Builder(factory)
+                        .add("empid", factory.createJavaType(Int::class.javaPrimitiveType))
+                        .add("deptno", factory.createJavaType(Int::class.javaPrimitiveType))
+                        .add("name", factory.createJavaType(String::class.java))
+                        .add("salary", factory.createJavaType(Int::class.javaPrimitiveType))
+                        .add("commission", factory.createJavaType(Int::class.java))
+                        .build()
+                },
+                ImmutableBitSet.of(0),
+                listOf(
+                    arrayOf(100, 10, "Bill", 10000, 1000),
+                    arrayOf(110, 10, "Theodore", 11500, 250),
+                    arrayOf(150, 10, "Sebastian", 7000, null),
+                    arrayOf(200, 20, "Eric", 8000, 500)
                 )
             )
-            .put(
-                "depts",
-                PkClusteredTable(
-                    { factory: RelDataTypeFactory ->
-                        RelDataTypeFactory.Builder(factory)
-                            .add("deptno", factory.createJavaType(Int::class.javaPrimitiveType))
-                            .add("name", factory.createJavaType(String::class.java))
-                            .build()
-                    },
-                    ImmutableBitSet.of(0),
-                    Arrays.asList(
-                        arrayOf(10, "Sales"),
-                        arrayOf(30, "Marketing"),
-                        arrayOf(40, "HR")
-                    )
+        )
+        .put(
+            "depts",
+            PkClusteredTable(
+                { factory: RelDataTypeFactory ->
+                    RelDataTypeFactory.Builder(factory)
+                        .add("deptno", factory.createJavaType(Int::class.javaPrimitiveType))
+                        .add("name", factory.createJavaType(String::class.java))
+                        .build()
+                },
+                ImmutableBitSet.of(0),
+                listOf(
+                    arrayOf(10, "Sales"),
+                    arrayOf(30, "Marketing"),
+                    arrayOf(40, "HR")
                 )
             )
-            .build()
-    }
+        )
+        .build()
 
     override fun getTableMap(): Map<String, Table> {
         return tables
@@ -79,17 +74,12 @@ class HrClusteredSchemaKotlin : AbstractSchema() {
         private val pkColumns: ImmutableBitSet,
         private val data: List<Array<Any?>>
     ) : AbstractTable(), ScannableTable {
+
         override fun getStatistic(): Statistic {
-            val collationFields: MutableList<RelFieldCollation> = ArrayList()
-            for (key in pkColumns) {
-                collationFields.add(
-                    RelFieldCollation(
-                        key!!,
-                        RelFieldCollation.Direction.ASCENDING,
-                        RelFieldCollation.NullDirection.LAST
-                    )
-                )
+            val collationFields = pkColumns.toList().map {
+                RelFieldCollation(it, RelFieldCollation.Direction.ASCENDING, RelFieldCollation.NullDirection.LAST)
             }
+
             return Statistics.of(
                 data.size.toDouble(), ImmutableList.of(pkColumns),
                 ImmutableList.of(RelCollations.of(collationFields))
