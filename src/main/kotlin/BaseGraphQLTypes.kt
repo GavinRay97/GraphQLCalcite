@@ -9,24 +9,25 @@ object BaseGraphQLTypes {
 
     val IntComparisonExpressionType = mkComparisonExpressionInputType(
         Scalars.GraphQLInt,
-        "Int_comparison_exp",
+        "Int_comparison_exp1",
         "Boolean expression to compare columns of type \"Int\". All fields are combined with logical 'AND'."
     )
 
     val FloatComparisonExpressionType = mkComparisonExpressionInputType(
         Scalars.GraphQLFloat,
-        "Float_comparison_exp",
+        "Float_comparison_exp1",
         "Boolean expression to compare columns of type \"Float\". All fields are combined with logical 'AND'."
     )
+
     val BooleanComparisonExpressionType = mkComparisonExpressionInputType(
         Scalars.GraphQLBoolean,
-        "Boolean_comparison_exp",
+        "Boolean_comparison_exp1",
         "Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
     )
 
     val StringComparisonExpressionType: GraphQLInputObjectType = mkComparisonExpressionInputType(
         Scalars.GraphQLString,
-        "String_comparison_exp",
+        "String_comparison_exp1",
         "Boolean expression to compare columns of type \"String\". All fields are combined with logical 'AND'."
     ).transform { t: GraphQLInputObjectType.Builder ->
         val fields = listOf(

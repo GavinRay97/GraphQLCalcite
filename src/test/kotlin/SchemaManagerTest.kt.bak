@@ -1,0 +1,211 @@
+wimport extensions.print
+import extensions.toList
+import graphql.ExecutionInput
+import graphql.ExecutionResult
+import graphql.nextgen.GraphQL
+import graphql.schema.idl.SchemaPrinter
+import io.kotest.core.extensions.install
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.extensions.testcontainers.JdbcTestContainerExtension
+import io.kotest.matchers.shouldBe
+import org.apache.calcite.adapter.csv.CsvSchema
+import org.apache.calcite.adapter.csv.CsvTable
+import org.apache.calcite.adapter.jdbc.JdbcSchema
+import org.apache.calcite.tools.Frameworks
+import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.containers.PostgreSQLContainer
+import java.io.File
+
+class SchemaManagerTest : FunSpec({
+    val csvFileDirectory = "src/test/resources/csv-files"
+    val csvSchema = CsvSchema(File(csvFileDirectory), CsvTable.Flavor.SCANNABLE)
+
+    val postgres = PostgreSQLContainer<Nothing>("postgres:14").apply {
+        withDatabaseName("testdb_1")
+        startupAttempts = 1
+    }
+
+    val postgresDatasource = install(JdbcTestContainerExtension(postgres)) {
+        poolName = "postgres1_connectionpool"
+        maximumPoolSize = 8
+        idleTimeout = 10000
+    }
+
+    val mysql = MySQLContainer<Nothing>("mysql:8").apply {
+        withDatabaseName("testdb_2")
+        startupAttempts = 1
+    }
+
+    val mysqlDatasource = install(JdbcTestContainerExtension(mysql)) {
+        poolName = "mysql1_connectionpool"
+        maximumPoolSize = 8
+        idleTimeout = 10000
+    }
+
+    test("Postgres and MySQL") {
+        postgresDatasource.connection.createStatement().execute(
+            """
+            CREATE SCHEMA IF NOT EXISTS test1;
+            CREATE TABLE IF NOT EXISTS test1.test_table1 (
+                id INT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                PRIMARY KEY (id)
+            );
+            INSERT INTO test1.test_table1 (id, name) VALUES (1, 'test1');
+            INSERT INTO test1.test_table1 (id, name) VALUES (2, 'test2');
+            
+            CREATE SCHEMA IF NOT EXISTS test2;
+            CREATE TABLE IF NOT EXISTS test2.test_table2 (
+                id INT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                PRIMARY KEY (id)
+            );
+            INSERT INTO test2.test_table2 (id, name) VALUES (3, 'test3');
+            INSERT INTO test2.test_table2 (id, name) VALUES (4, 'test4');
+        """.trimIndent()
+        )
+
+        SchemaManager.connection.rootSchema.add(
+            "postgres_1",
+            JdbcDatabaseWrappingSchema(
+                rootSchema = SchemaManager.connection.rootSchema,
+                dataSource = postgresDatasource,
+                databaseName = "testdb_1"
+            )
+        )
+
+        mysqlDatasource.connection.createStatement().execute(
+            """
+            CREATE TABLE test_table3 (
+                id INT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                PRIMARY KEY (id)
+            );
+        """.trimIndent()
+        )
+
+        SchemaManager.connection.rootSchema.add(
+            "mysql_1",
+            JdbcDatabaseWrappingSchema(
+                rootSchema = SchemaManager.connection.rootSchema,
+                dataSource = mysqlDatasource,
+                databaseName = "testdb_2"
+            )
+        )
+
+        println(SchemaManager.connection.rootSchema.print())
+    }
+
+
+    test("Create a datasource with a schema") {
+        // given
+        val datasourceName = "csv_datasource"
+        val schemaName = "root"
+
+        // when
+        val rootSchema = SchemaManager.connection.rootSchema
+        val ds = rootSchema.add(datasourceName, Frameworks.createRootSchema(true))
+        ds.add(schemaName, csvSchema)
+
+        // then
+        csvSchema.tableNames.size shouldBe 1
+
+        println(rootSchema.print())
+    }
+
+    test("Add Postgres and MySQL JDBC sources to rootSchema") {
+        val dbPassword = "AbCd3FgH1JkLmN0pQrStUvWxYz#@!"
+        val mysqlDataSource = JdbcSchema.dataSource(
+            "jdbc:mysql://localhost:3306/Chinook",
+            "com.mysql.cj.jdbc.Driver",
+            "root",
+            dbPassword
+        )
+        val sqlServerDataSource = JdbcSchema.dataSource(
+            "jdbc:sqlserver://localhost:1433;databaseName=Chinook",
+            "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+            "sa",
+            dbPassword
+        )
+        sqlServerDataSource.connection.metaData.catalogs.toList().forEach {
+            println(it.get("TABLE_CAT"))
+        }
+
+        val rootSchema = SchemaManager.connection.rootSchema
+        rootSchema.add(
+            "mysql_1",
+            JdbcSchema.create(rootSchema, "mysql_1", mysqlDataSource, null, null)
+        )
+        rootSchema.add(
+            "sqlserver_1",
+            JdbcSchema.create(rootSchema, "sqlserver_1", sqlServerDataSource, null, null)
+        )
+
+        println(rootSchema.print())
+
+        val sql = """
+            SELECT * FROM mysql_1.Artist
+            INNER JOIN sqlserver_1.Album
+                    ON sqlserver_1.Album.ArtistId = mysql_1.Artist.ArtistId
+        """.trimIndent()
+
+        val result = SchemaManager.connection.createStatement().executeQuery(sql)
+        val resultList = result.toList()
+        println(resultList)
+    }
+
+
+
+    test("Generate GraphQL Schema from datasource and execute query") {
+        // given
+        SchemaManager.connection.rootSchema.add("csv", csvSchema)
+
+        // when
+        val graphqlSchema = SchemaManager.generateGraphQLSchemaFromRootSchema(SchemaManager.connection.rootSchema)
+        println(SchemaPrinter().print(graphqlSchema))
+        val build: GraphQL = GraphQL.newGraphQL(graphqlSchema).build()
+        val executionResult: ExecutionResult = build.execute(
+            ExecutionInput.newExecutionInput()
+                .query(
+                    """
+                    query {
+                        csv { 
+                            scott_jdbc_csv_table {
+                                EMPNO
+                                ENAME
+                            }
+                        }
+                    }
+                """.trimIndent()
+                )
+                .build()
+        )
+
+        // then
+        println(executionResult.toSpecification())
+    }
+
+//    test("add two schemas") {
+//        // given
+//        val datasourceName1 = "csv_datasource"
+//        val schemaName1 = "root"
+//        val schema1 = csvSchema
+//
+//        val datasourceName2 = "fake_database"
+//        val schemaName2 = "hr"
+//        val schema2 = HrClusteredSchemaKotlin()
+//
+//        // when
+//        SchemaManager.createNewDataSource(datasourceName1)
+//        SchemaManager.createNewDataSource(datasourceName2)
+//        SchemaManager.addSchemaToDatasource(datasourceName1, schemaName1, schema1)
+//        SchemaManager.addSchemaToDatasource(datasourceName2, schemaName2, schema2)
+//
+//        // then
+//        val sampleQuery = """
+//            SELECT * FROM ${datasourceName2}.${schemaName2}.emps
+//        """
+//        val result = SchemaManager.executeQuery(sampleQuery)
+//        println("Result: $result")
+//    }
+})

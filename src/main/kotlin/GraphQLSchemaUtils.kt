@@ -8,10 +8,13 @@ import graphql.schema.GraphQLInputObjectField
 import graphql.schema.GraphQLInputObjectType
 import graphql.schema.GraphQLInputType
 import graphql.schema.GraphQLInterfaceType
+import graphql.schema.GraphQLList
+import graphql.schema.GraphQLNonNull
 import graphql.schema.GraphQLObjectType
 import graphql.schema.GraphQLOutputType
 import graphql.schema.GraphQLScalarType
 import graphql.schema.GraphQLSchema
+import graphql.schema.GraphQLType
 import graphql.schema.GraphQLTypeReference
 import graphql.schema.GraphQLUnionType
 
@@ -23,7 +26,7 @@ class GraphQLFieldDefinitionBuilder {
     var name: String? = null
     var type: GraphQLOutputType? = null
     var arguments: List<GraphQLArgument>? = null
-    var resolve: DataFetcher<*>? = null
+    var dataFetcher: DataFetcher<*>? = null
     var description: String? = null
 
     fun build(): GraphQLFieldDefinition {
@@ -33,7 +36,7 @@ class GraphQLFieldDefinitionBuilder {
                 if (name != null) name(name)
                 if (type != null) type(type)
                 if (arguments != null) arguments(arguments)
-                if (resolve != null) dataFetcher(resolve)
+                if (dataFetcher != null) dataFetcher(dataFetcher)
                 if (description != null) description(description)
             }
             .build()
@@ -231,6 +234,14 @@ class GraphQLSchemaBuilder {
             }
             .build()
     }
+}
+
+inline fun graphqlList(type: () -> GraphQLType): GraphQLList {
+    return GraphQLList(type.invoke())
+}
+
+inline fun graphqlNonNull(type: () -> GraphQLType): GraphQLNonNull {
+    return GraphQLNonNull(type.invoke())
 }
 
 

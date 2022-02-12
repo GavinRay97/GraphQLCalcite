@@ -1,13 +1,31 @@
 import org.apache.calcite.adapter.enumerable.EnumerableConvention
 import org.apache.calcite.plan.RelOptUtil
+import org.apache.calcite.rel.RelNode
+import org.apache.calcite.rel.rel2sql.RelToSqlConverter
 import org.apache.calcite.sql.SqlExplainFormat
 import org.apache.calcite.sql.SqlExplainLevel
+import org.apache.calcite.sql.dialect.CalciteSqlDialect
 import org.apache.calcite.tools.FrameworkConfig
 import org.apache.calcite.tools.Frameworks
 
 object CalciteUtils {
 
-    fun executeQuery(
+    fun parse(sql: String, frameworkConfig: FrameworkConfig): RelNode {
+        val planner = Frameworks.getPlanner(frameworkConfig)
+        val sqlNode = planner.parse(sql)
+        val validated = planner.validate(sqlNode)
+        return planner.rel(validated).project()
+    }
+
+    fun relNodeToSql(relNode: RelNode): String {
+        return RelToSqlConverter(CalciteSqlDialect.DEFAULT)
+            .visitRoot(relNode)
+            .asStatement()
+            .toSqlString(CalciteSqlDialect.DEFAULT)
+            .toString()
+    }
+
+    fun debugQuery(
         config: FrameworkConfig,
         query: String,
         debug: Boolean
