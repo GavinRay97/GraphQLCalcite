@@ -5,70 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b31317d-448c-4a75-a576-c7ba10516d8f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/7/0723795a3719c6bfacab0bb6d7161e38d26679ea" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/0/104019e88d5d7aa1b9d22b386667217610ac432a" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/2/125ba78ab425f0fbf75d35e21a02ceb764f13801" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/f/3f096ea1d6317b8bfbc94ba4b629a38d125146ad" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/3/43ab48c309a50a5b81d93d973242a98fb47d9265" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/7/47c80cb560c6876a14d4c39738aa5dae8fd071a8" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/3/53823a0b08bd285c99fbe77e52b941e326ce1392" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/3/638c100fef00756959b5c36c222f54690e0d8663" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/2/e2160df177f6a55def20e105a3fc7e7d2f9db325" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/a/ea80418a033b727dd2f41c7975b38e3280ffc873" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/b/fb7ed972c7885dd1845c3b6b6498d76b5f57a668" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/kotlin/ExampleQueryProviderTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/kotlin/ForeignKeyManagerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/ktlint.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scala_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Changes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Changes/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/calcite-plan-visualization/planner-viz-data-JDBC_SCOTT.js" beforeDir="false" afterPath="$PROJECT_DIR$/calcite-plan-visualization/planner-viz-data-JDBC_SCOTT.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-chinook/.data/mssql/db-init.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-chinook/.data/mssql/db-init.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-chinook/.data/mssql/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-chinook/.data/mssql/docker-entrypoint.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-chinook/.data/mysql/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker-chinook/.data/mysql/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-chinook/.data/postgres/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker-chinook/.data/postgres/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-chinook/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-chinook/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/benchmark/kotlin/Benchmarks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmark/kotlin/Benchmarks.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/hr-schema.graphql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Example.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GraphQLComparisonExpressionTypes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/HrClusteredSchema.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Application.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/BaseGraphQLTypes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/BaseGraphQLTypes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CalciteUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CalciteUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/GraphQLSchemaUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/GraphQLSchemaUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/GraphQLToCalcite.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/HrClusteredSchemaKotlin.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Predicate.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/TableQuery.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Utils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/extensions/GraphQLDocument.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/extensions/GraphQLValue.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/extensions/RelDataType.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/extensions/Schema.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/extensions/CalciteSchema.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/otherschema.graphql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ExampleScala.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/example/scala_version/ExampleScala.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ForeignKeyManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ForeignKeyManager.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -448,7 +386,7 @@
       <workItem from="1644096722927" duration="27761000" />
       <workItem from="1644204350629" duration="32037000" />
       <workItem from="1644363157695" duration="60143000" />
-      <workItem from="1644547697725" duration="20120000" />
+      <workItem from="1644547697725" duration="20568000" />
     </task>
     <servers />
   </component>
