@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <option name="experimental" value="true" />
     <profile name="Gradle 1" modules="GraphQLCalcite.main,GraphQLCalcite.test">
       <option name="deprecationWarnings" value="true" />
       <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-target:jvm-17" />
+        <parameter value="-Ysafe-init" />
       </parameters>
     </profile>
   </component>
