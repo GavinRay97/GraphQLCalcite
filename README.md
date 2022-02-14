@@ -3,11 +3,11 @@
 - [Apache Calcite <-> Distributed, Federated GraphQL API](#apache-calcite---distributed-federated-graphql-api)
 - [Goals](#goals)
 - [Roadmap and Current Progress](#roadmap-and-current-progress)
-  - [The Roadmap](#the-roadmap)
-  - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
+    - [The Roadmap](#the-roadmap)
+    - [Walkthrough of Current Progress](#walkthrough-of-current-progress)
 - [Technical Architecture](#technical-architecture)
-  - [Approach and Design](#approach-and-design)
-  - [Why Kotlin](#why-kotlin)
+    - [Approach and Design](#approach-and-design)
+    - [Why Kotlin](#why-kotlin)
 - [Related Projects and Reference Material](#related-projects-and-reference-material)
 
 This repo contains a work-in-progress prototype and research project on using Apache Calcite as the backbone of GraphQL
@@ -59,14 +59,14 @@ expression, then executed against the Calcite adapter giving the proper results.
     - [ ] Distinct
     - [ ] Group By/Aggregations (nice to have)
 - [x] Execute the converted Relational Algebra expression against data source, returning correct results
-- [ ] Automatically generate resolvers for the generated GraphQL query operations that perform the execution of the
+- [x] Automatically generate resolvers for the generated GraphQL query operations that perform the execution of the
   query (current execution is invoked manually)
 - [x] Support Queries
 - [ ] Support Mutations
-- [ ] Figure out whether it is possible to support Subscriptions with Calcite's adapter model
+- [x] Figure out whether it is possible to support Subscriptions with Calcite's adapter model
     - [ ] Support subscriptions if so (nice to have)
-- [ ] Support `JOIN` / nested GraphQL field access and queries
-- [ ] Design system for dynamic Calcite schema registration and modification while program is running
+- [x] Support `JOIN` / nested GraphQL field access and queries
+- [x] Design system for dynamic Calcite schema registration and modification while program is running
 - [ ] Figure out how to let users implement their own data sources via HTTP (or similar)
 
 ## Walkthrough of Current Progress
@@ -174,7 +174,8 @@ OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY
 And finally, the results of our query:
 
 ```sql
-EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO
+EMPNO
+,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO
 
 7566,JONES,MANAGER,7839,1981-02-04,2975.00,null,20,
 7698,BLAKE,MANAGER,7839,1981-01-05,2850.00,null,30,
@@ -193,7 +194,8 @@ trying to build"?
 
 The high level approach that has been pursued here can be broken down by some explanatory images.
 
-> Note: These images are taken from [Stamatis Zampetakis](http://people.apache.org/~zabetak/) fantastic presentation on YouTube
+> Note: These images are taken from [Stamatis Zampetakis](http://people.apache.org/~zabetak/) fantastic presentation on
+> YouTube
 >
 > [_"An introduction to query processing & Apache Calcite"_](https://www.youtube.com/watch?v=p1O3E33FIs8)
 
@@ -219,6 +221,10 @@ With these pieces in place, you can see below how rather than SQL query, we migh
 identical semantics, and continue using Calcite as though we were a "plain-old SQL query"
 
 ![sql-query-to-calcite-ast-example](./readme-images/graphql-query-to-relnode.png)
+
+Visualized in an image, the process is roughly:
+
+![query-pipeline](./readme-images/gql-calcite-query-pipeline-2.png)
 
 Some restrictions and assumptions made about the shape of the GraphQL API and corresponding queries, and this is what
 lets this entire thing be possible.
