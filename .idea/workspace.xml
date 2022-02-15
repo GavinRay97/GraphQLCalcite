@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1b31317d-448c-4a75-a576-c7ba10516d8f" name="Changes" comment="">
+    <list default="true" id="1b31317d-448c-4a75-a576-c7ba10516d8f" name="Changes" comment="Update readme">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/operation_providers/GraphQLFindAllQueryProviderImpl.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/BaseGraphQLTypes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/operation_providers/BaseGraphQLTypes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CalciteSchemaManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CalciteSchemaManager.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ForeignKeyManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ForeignKeyManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/GraphQLSchemaGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/GraphQLSchemaGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/VertxServer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/server/VertxServer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/ForeignKeyTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/ForeignKeyTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,28 +40,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="benchmark" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
-                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="GraphQLCalcite" type="f1a62948:ProjectNode" />
-                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
-                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -135,13 +120,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "WebServerToolWindowFactoryState": "false",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "extract.method.default.visibility": "private",
     "jdk.selected.JAVA_MODULE": "graalvm-17 (22.0.0-dev)",
     "last_directory_selection": "C:/Users/rayga/WindowsProjects/GraphQLCalciteJava/src/main/java",
-    "last_opened_file_path": "C:/Users/rayga/WindowsProjects/GraphQLCalciteKotlin",
+    "last_opened_file_path": "C:/Users/rayga/WindowsProjects/GraphQLCalciteKotlin/readme-images",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -152,17 +138,17 @@
     "project.structure.side.proportion": "0.0",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "scala_project_settings_configurable.last_selected_tab_index": "0",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Scala",
+    "settings.editor.selected.configurable": "preferences.language.Kotlin",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalciteKotlin\readme-images" />
       <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalciteKotlin" />
       <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalciteJava\src\test\resources" />
       <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalcite\src\main\kotlin" />
       <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalcite\src\test\resources\csv-files" />
-      <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalcite\libs\org.sangria-graphql" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\rayga\WindowsProjects\GraphQLCalciteKotlin\src\main\scala\mypackage" />
@@ -177,6 +163,8 @@
       <recent name="SQLUtils" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="operation_providers" />
+      <recent name="server" />
       <recent name="" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -199,7 +187,7 @@
       <recent name="com.example" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.VertxServer (1)">
+  <component name="RunManager" selected="Gradle.GraphQLCalciteKotlin [analyzeCode]">
     <configuration default="true" type="Babashka" factoryName="BabashkaLocalRepl" activateToolWindowBeforeRun="false">
       <setting name="displayName" value="" />
       <setting name="bbPath" value="" />
@@ -236,7 +224,7 @@
       <setting name="focusEditor" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="ExampleQueryProviderTest.should return correct query" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ForeignKeyTest.manualTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -249,7 +237,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ExampleQueryProviderTest.should return correct query&quot;" />
+            <option value="&quot;ForeignKeyTest.manualTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -282,22 +270,52 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="KtorServerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="KtorServerKt" />
-      <module name="GraphQLCalcite.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="ForeignKeyTest.throwawayTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--info" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ForeignKeyTest.throwawayTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GraphQLCalciteKotlin [analyzeCode]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="analyzeCode" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
     </configuration>
     <configuration name="VertxServer (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="VertxServer" />
-      <module name="GraphQLCalcite.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="VertxServer" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="server.VertxServer" />
       <module name="GraphQLCalcite.main" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -331,10 +349,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.GraphQLCalciteKotlin [analyzeCode]" />
+        <item itemvalue="Gradle.ForeignKeyTest.throwawayTest" />
+        <item itemvalue="Gradle.ForeignKeyTest.manualTest" />
         <item itemvalue="Kotlin.VertxServer (1)" />
-        <item itemvalue="Gradle.ExampleQueryProviderTest.should return correct query" />
-        <item itemvalue="Kotlin.VertxServer" />
-        <item itemvalue="Kotlin.KtorServerKt" />
         <item itemvalue="Gradle.ForeignKeyTest.testOther (1)" />
       </list>
     </recent_temporary>
@@ -386,8 +404,16 @@
       <workItem from="1644096722927" duration="27761000" />
       <workItem from="1644204350629" duration="32037000" />
       <workItem from="1644363157695" duration="60143000" />
-      <workItem from="1644547697725" duration="20568000" />
+      <workItem from="1644547697725" duration="71029000" />
     </task>
+    <task id="LOCAL-00001" summary="Update readme">
+      <created>1644882293818</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1644882293818</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -403,6 +429,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

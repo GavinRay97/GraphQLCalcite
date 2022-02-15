@@ -42,7 +42,7 @@ object CalciteSchemaManager {
     private fun initCalciteConnection(): CalciteConnection {
         // Initialize the JDBC driver
         Class.forName(Driver::class.java.name)
-        DriverManager.registerDriver(org.apache.calcite.jdbc.Driver())
+        DriverManager.registerDriver(Driver())
         return DriverManager
             .getConnection(
                 "jdbc:calcite:",
@@ -61,7 +61,7 @@ object CalciteSchemaManager {
 
         fun emptyAbstractSchema(): AbstractSchema {
             return object : AbstractSchema() {
-                override fun getSubSchemaMap(): Map<String, Schema> {
+                override fun getSubSchemaMap(): Map<String, org.apache.calcite.schema.Schema> {
                     return HashMap()
                 }
             }
@@ -168,5 +168,5 @@ object CalciteSchemaManager {
 
         return column.index
     }
-
 }
+

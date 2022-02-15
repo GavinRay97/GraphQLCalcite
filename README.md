@@ -8,6 +8,7 @@
 - [Technical Architecture](#technical-architecture)
     - [Approach and Design](#approach-and-design)
     - [Why Kotlin](#why-kotlin)
+- [Youtube Presentation](#youtube-presentation)
 - [Related Projects and Reference Material](#related-projects-and-reference-material)
 
 This repo contains a work-in-progress prototype and research project on using Apache Calcite as the backbone of GraphQL
@@ -237,6 +238,12 @@ writing the facades/conversions.
 
 This is a 10,000ft view of the technical architecture and approach taken to the problem in this project. For details,
 see code.
+
+## Youtube Presentation
+
+Video from the January 2022 Apache Calcite online Meetup where a very early draft of this work was presented:
+
+[![Apache Calcite 2022 Meetup January, GraphQL Presentation](./readme-images/graphql-apache-calcite-cover.png)](https://youtu.be/ae95vICkOnc "Apache Calcite 2022 Meetup January, GraphQL Presentation")
 
 ## Why Kotlin
 

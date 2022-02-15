@@ -1,3 +1,5 @@
+package operation_providers
+
 import graphql.Scalars
 import graphql.schema.GraphQLInputObjectField
 import graphql.schema.GraphQLInputObjectType

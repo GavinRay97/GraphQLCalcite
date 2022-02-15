@@ -4,14 +4,98 @@ import graphql.schema.GraphQLFieldDefinition
 import graphql.schema.GraphQLInputType
 import graphql.schema.GraphQLList
 import graphql.schema.GraphQLNonNull
+import graphql.schema.GraphQLObjectType
 import graphql.schema.GraphQLOutputType
 import graphql.schema.GraphQLSchema
 import graphql.schema.GraphQLType
 import graphql.schema.GraphQLTypeReference
+import operation_providers.BaseGraphQLTypes
 import org.apache.calcite.rel.type.RelDataType
 import org.apache.calcite.rel.type.RelDataTypeField
 import org.apache.calcite.schema.SchemaPlus
+import org.apache.calcite.schema.Table
 import org.apache.calcite.sql.type.SqlTypeFamily
+
+
+interface GraphQLOperationProvider {
+    fun getQueries(): List<GraphQLFieldDefinition>
+    fun getMutations(): List<GraphQLFieldDefinition>
+    fun getSubscriptions(): List<GraphQLFieldDefinition>
+}
+
+object GraphQLFindAllQueryProvider : GraphQLOperationProvider {
+    override fun getQueries(): List<GraphQLFieldDefinition> {
+        return emptyList()
+
+    }
+
+    override fun getMutations(): List<GraphQLFieldDefinition> {
+        return emptyList()
+    }
+
+    override fun getSubscriptions(): List<GraphQLFieldDefinition> {
+        return emptyList()
+    }
+
+    private fun generateDatabaseQueryFields(database: SchemaPlus): List<GraphQLFieldDefinition> {
+        return emptyList()
+
+    }
+
+    private fun generateSchemaQueryFields(schema: SchemaPlus): List<GraphQLFieldDefinition> {
+        return emptyList()
+
+    }
+
+    private fun generateTableQueryFields(table: Table): List<GraphQLFieldDefinition> {
+        return emptyList()
+    }
+
+    private fun generateColumnQueryFields(fields: List<RelDataTypeField>): List<GraphQLFieldDefinition> {
+        return emptyList()
+    }
+
+}
+
+data class GraphQLSchemaGenerator2(
+    val operationProviders: List<GraphQLOperationProvider>
+) {
+    fun buildSchema(): GraphQLSchema {
+        val schema = GraphQLSchema.newSchema()
+
+        val queryTypeBuilder = GraphQLObjectType.newObject().name("Query")
+        val mutationTypeBuilder = GraphQLObjectType.newObject().name("Mutation")
+        val subscriptionTypeBuilder = GraphQLObjectType.newObject().name("Subscription")
+
+        for (operationProvider in operationProviders) {
+            for (query in operationProvider.getQueries()) {
+                queryTypeBuilder.field(query)
+            }
+            for (mutation in operationProvider.getMutations()) {
+                mutationTypeBuilder.field(mutation)
+            }
+            for (subscription in operationProvider.getSubscriptions()) {
+                subscriptionTypeBuilder.field(subscription)
+            }
+        }
+
+        val queryType = queryTypeBuilder.build()
+        val mutationType = mutationTypeBuilder.build()
+        val subscriptionType = subscriptionTypeBuilder.build()
+
+        if (queryType.fields.isNotEmpty()) {
+            schema.query(queryTypeBuilder)
+        }
+        if (mutationType.fields.isNotEmpty()) {
+            schema.mutation(mutationTypeBuilder)
+        }
+        if (subscriptionType.fields.isNotEmpty()) {
+            schema.subscription(subscriptionTypeBuilder)
+        }
+
+        return schema.build()
+    }
+}
 
 object GraphQLSchemaGenerator {
     private fun relDataTypeToGraphQLType(type: RelDataType): GraphQLType {
@@ -137,6 +221,7 @@ object GraphQLSchemaGenerator {
             val fullyQualifiedTableName = FullyQualifiedTableName(database.name, schema?.name, tableName)
             val outgoingFkTypes = buildOutgoingForeignKeyFieldTypes(fullyQualifiedTableName)
             val incomingFkTypes = buildIncomingForeignKeyFieldTypes(fullyQualifiedTableName)
+            val relatedTypes = outgoingFkTypes + incomingFkTypes
 
             field {
                 name = tableName
@@ -144,7 +229,7 @@ object GraphQLSchemaGenerator {
                 type = graphqlList {
                     objectType {
                         name = path + "_" + tableName + "_type"
-                        fields = outgoingFkTypes + incomingFkTypes + fieldList.map { field: RelDataTypeField ->
+                        fields = relatedTypes + fieldList.map { field: RelDataTypeField ->
                             field {
                                 name = field.name
                                 type = relDataTypeToGraphQLType(field.type) as GraphQLOutputType
