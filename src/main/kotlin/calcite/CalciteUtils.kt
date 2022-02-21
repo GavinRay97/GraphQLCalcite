@@ -1,3 +1,5 @@
+package calcite
+
 import org.apache.calcite.adapter.enumerable.EnumerableConvention
 import org.apache.calcite.plan.RelOptUtil
 import org.apache.calcite.rel.RelNode

@@ -1,8 +1,8 @@
 package com.example
 
-import CalciteSchemaManager
-import GraphQLSchemaGenerator
+import calcite.CalciteSchemaManager
 import graphql.GraphQL
+import graphql.GraphQLSchemaGenerator
 import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.BenchmarkMode
 import kotlinx.benchmark.Blackhole

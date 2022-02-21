@@ -1,4 +1,14 @@
+import calcite.CalciteRootSchema
+import calcite.CalciteSchemaManager
+import calcite.ForeignKeyManager
+import entity.ForeignKey
+import entity.FullyQualifiedTableName
 import graphql.GraphQL
+import graphql.GraphQLSchemaGeneratorNew
+import graphql.operationgenerators.FindAllQueryGenerator
+import graphql.operationgenerators.FindByPkQueryGenerator
+import graphql.operationgenerators.InsertManyMutationGenerator
+import operation_providers.DefaultSqlTypeToGraphQLMapping
 import javax.sql.DataSource
 
 // Creates sample data for the example application.
@@ -71,7 +81,7 @@ object ExampleQueryProvider {
                 insert into post (id, user_id, title, content) values (4, 1, 'Post 4', 'Content 3');
                 """
         )
-        
+
         CalciteSchemaManager.addDatabase("hsql", datasource)
         ForeignKeyManager.addForeignKey(
             ForeignKey(
@@ -83,11 +93,20 @@ object ExampleQueryProvider {
             )
         )
 
-        graphql = GraphQL.newGraphQL(
-            GraphQLSchemaGenerator.generateGraphQLSchemaFromRootSchema(
-                CalciteSchemaManager.rootSchema
+        val calciteRootSchema = CalciteRootSchema(CalciteSchemaManager.rootSchema)
+        val schemaGenerator = GraphQLSchemaGeneratorNew(calciteRootSchema, DefaultSqlTypeToGraphQLMapping)
+
+        val graphqlSchema = schemaGenerator.generate(
+            queryGenerators = listOf(
+                FindAllQueryGenerator,
+                FindByPkQueryGenerator
+            ),
+            mutationGenerators = listOf(
+                InsertManyMutationGenerator
             )
-        ).build()
+        )
+        
+        graphql = GraphQL.newGraphQL(graphqlSchema).build()
     }
 
 }

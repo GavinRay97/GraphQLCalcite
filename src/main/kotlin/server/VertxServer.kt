@@ -7,6 +7,10 @@ import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.handler.graphql.GraphQLHandler
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions
+import kotlinx.html.body
+import kotlinx.html.html
+import kotlinx.html.p
+import kotlinx.html.stream.createHTML
 import prettyPrint
 
 
@@ -22,7 +26,26 @@ object VertxServer {
         router.route().handler(BodyHandler.create())
 
         router.get("/").handler { context ->
-            context.response().end("Hello World!")
+            val text = createHTML().html {
+                body {
+                    p {
+                        +"Hello World!"
+                    }
+                    p {
+                        +"This is a simple example of a GraphQL server written in Kotlin."
+                    }
+                    p {
+                        +"Try to run the GraphiQL client to see how it works."
+                    }
+                    p {
+                        +"The GraphQL endpoint is at /graphql"
+                    }
+                    p {
+                        +"The GraphiQL client is at /graphiql"
+                    }
+                }
+            }
+            context.response().end(text)
         }
 
         router.get("/graphql-example").handler { context ->

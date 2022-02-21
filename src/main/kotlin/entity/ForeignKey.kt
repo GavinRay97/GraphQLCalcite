@@ -1,3 +1,6 @@
+package entity
+
+import calcite.CalciteSchemaManager
 import org.apache.calcite.rel.RelReferentialConstraint
 import org.apache.calcite.util.mapping.IntPair
 

@@ -1,6 +1,13 @@
+import calcite.CalciteRootSchema
+import calcite.CalciteSchemaManager
+import calcite.ForeignKeyManager
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import entity.ForeignKey
+import entity.FullyQualifiedTableName
 import graphql.GraphQL
+import graphql.GraphQLSchemaGeneratorNew
+import operation_providers.DefaultSqlTypeToGraphQLMapping
 import org.apache.calcite.rel.RelNode
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -80,7 +87,7 @@ class ForeignKeyTest {
 
     @Test
     fun manualTest() {
-        var builder = CalciteSchemaManager.relBuilder
+        val builder = CalciteSchemaManager.relBuilder
         CalciteSchemaManager.addDatabase("hsql", datasource1)
 
         ForeignKeyManager.addForeignKey(
@@ -93,9 +100,10 @@ class ForeignKeyTest {
             )
         )
 
-        val relNode = builder.build()
+        val calciteRootSchema: CalciteRootSchema = CalciteRootSchema(
+            CalciteSchemaManager.rootSchema
+        )
 
-        executeRelationalExpr(relNode)
     }
 
     fun getDatasourceFromJdbcTestcontainer(container: JdbcDatabaseContainer<Nothing>): DataSource {
@@ -140,7 +148,8 @@ class ForeignKeyTest {
         )
 
 
-        val graphqlSchema = GraphQLSchemaGenerator.generateGraphQLSchemaFromRootSchema(rootSchema)
+        val calciteRootSchema = CalciteRootSchema(rootSchema)
+        val graphqlSchema = GraphQLSchemaGeneratorNew(calciteRootSchema, DefaultSqlTypeToGraphQLMapping).generate()
         val graphql = GraphQL.newGraphQL(graphqlSchema).build()
 
         val postToUsersQuery = """
@@ -203,14 +212,14 @@ class ForeignKeyTest {
 //            println(it.columnReferences)
 //        }
 //
-//        CalciteSchemaManager.addDatabase("db1", datasource1)
-//        CalciteSchemaManager.addDatabase("db2", datasource2)
+//        calcite.CalciteSchemaManager.addDatabase("db1", datasource1)
+//        calcite.CalciteSchemaManager.addDatabase("db2", datasource2)
 //
-//        println(CalciteSchemaManager.rootSchema.print())
+//        println(calcite.CalciteSchemaManager.rootSchema.print())
 //
 //        val timeTaken = measureTimeMillis {
-//            CalciteUtils.executeQuery(
-//                CalciteSchemaManager.frameworkConfig,
+//            calcite.CalciteUtils.executeQuery(
+//                calcite.CalciteSchemaManager.frameworkConfig,
 //                """
 //            select * from db1.PUBLIC.POSTS
 //            inner join db2.PUBLIC.COMMENTS

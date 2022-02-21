@@ -1,3 +1,5 @@
+package entity
+
 import org.apache.calcite.rex.RexNode
 import org.apache.calcite.sql.SqlBinaryOperator
 import org.apache.calcite.sql.SqlOperator
@@ -18,7 +20,29 @@ sealed interface Expression {
         is COLUMN -> builder.field(name)
         is LITERAL -> builder.literal(value)
     }
+
+
+    fun toSQL(): String = when (this) {
+        is AND -> "(" + left.toSQL() + " AND " + right.toSQL() + ")"
+        is OR -> "(" + left.toSQL() + " OR " + right.toSQL() + ")"
+        is NOT -> "entity.NOT " + "(" + operand.toSQL() + ")"
+        is EQ -> left.toSQL() + " = " + right.toSQL()
+        is NEQ -> left.toSQL() + " != " + right.toSQL()
+        is GT -> left.toSQL() + " > " + right.toSQL()
+        is GTE -> left.toSQL() + " >= " + right.toSQL()
+        is LT -> left.toSQL() + " < " + right.toSQL()
+        is LTE -> left.toSQL() + " <= " + right.toSQL()
+        is IN -> left.toSQL() + " IN " + right.toSQL()
+        is NIN -> left.toSQL() + " entity.NOT IN " + right.toSQL()
+        is LIKE -> left.toSQL() + " entity.LIKE " + right.toSQL()
+        is NLIKE -> left.toSQL() + " entity.NOT entity.LIKE " + right.toSQL()
+        is IS_NULL -> operand.toSQL() + " IS NULL"
+        is LITERAL -> value.toString()
+        is COLUMN -> name
+        else -> throw IllegalArgumentException("Unknown expression type: $this")
+    }
 }
+
 
 sealed interface BinaryOperation : Expression {
     val left: Expression

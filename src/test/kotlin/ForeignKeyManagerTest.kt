@@ -1,3 +1,6 @@
+import calcite.ForeignKeyManager
+import entity.ForeignKey
+import entity.FullyQualifiedTableName
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat

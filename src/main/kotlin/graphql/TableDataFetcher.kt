@@ -1,3 +1,24 @@
+package graphql
+
+import calcite.CalciteSchemaManager
+import calcite.ForeignKeyManager
+import entity.AND
+import entity.COLUMN
+import entity.EQ
+import entity.Expression
+import entity.ForeignKey
+import entity.FullyQualifiedTableName
+import entity.GT
+import entity.GTE
+import entity.IN
+import entity.IS_NULL
+import entity.LITERAL
+import entity.LT
+import entity.LTE
+import entity.NEQ
+import entity.NIN
+import entity.NOT
+import entity.OR
 import extensions.toListOfMaps
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
@@ -23,7 +44,7 @@ data class TableDataFetcher(val fullyQualifiedTableName: FullyQualifiedTableName
      *  1. Create a query by:
      *      a. Scan on (DB, Schema, Table)
      *      b. Project all scalar fields
-     *      c. Convert the "where" argument to a filter clause
+     *      c. Convert the "where" graphql.argument to a filter clause
      *      d. Add "limit" and "offset" clauses
      *  2. Run the query
      *  3. For each nested field selection in the query:
@@ -74,7 +95,7 @@ data class TableDataFetcher(val fullyQualifiedTableName: FullyQualifiedTableName
                     this.scan(databaseName, tableName)
             }
 
-            //  Convert the "where" argument to a filter clause
+            //  Convert the "where" graphql.argument to a filter clause
             if (where != null)
                 this.filter(whereArgumentToExpression(where).toRexNode(this))
 

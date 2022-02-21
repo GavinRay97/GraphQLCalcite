@@ -1,5 +1,9 @@
+package calcite
+
 import com.google.common.graph.MutableNetwork
 import com.google.common.graph.NetworkBuilder
+import entity.ForeignKey
+import entity.FullyQualifiedTableName
 
 // TODO: Auto-discovery of foreign keys
 // Maybe using schema-crawler?
@@ -28,6 +32,22 @@ object ForeignKeyManager {
         }
     }
 
+    fun getIncomingForeignKeysForTable(table: FullyQualifiedTableName): Set<ForeignKey> {
+        return try {
+            foreignKeyGraph.inEdges(table)
+        } catch (_: Exception) {
+            emptySet()
+        }
+    }
+
+    fun getOutgoingForeignKeysForTable(table: FullyQualifiedTableName): Set<ForeignKey> {
+        return try {
+            foreignKeyGraph.outEdges(table)
+        } catch (_: Exception) {
+            emptySet()
+        }
+    }
+
     fun isForeignKey(table: FullyQualifiedTableName): Boolean {
         return foreignKeyGraph.nodes().contains(table)
     }
@@ -37,21 +57,14 @@ object ForeignKeyManager {
     }
 }
 
-data class PrimaryKey(val fullyQualifiedTableName: FullyQualifiedTableName, val columns: List<String>) {
+
+data class PrimaryKey(val table: CalciteRootSchema.Table, val columns: List<String>) {
     override fun toString(): String {
-        return "PrimaryKey(fullyQualifiedTableName=$fullyQualifiedTableName, columns=$columns)"
+        return "PrimaryKey2(table=$table, columns=$columns)"
     }
 }
 
-// TODO: Auto-discovery of primary keys
-// Maybe using schema-crawler?
 object PrimaryKeyManager {
-    val primaryKeys: MutableList<PrimaryKey> = mutableListOf()
-
-    val primaryKeysByTable: Map<FullyQualifiedTableName, List<PrimaryKey>>
-        get() = primaryKeys.groupBy { it.fullyQualifiedTableName }
-
-    fun addPrimaryKey(primaryKey: PrimaryKey) {
-        primaryKeys.add(primaryKey)
-    }
+    val primaryKeys: MutableMap<CalciteRootSchema.Table, PrimaryKey> = mutableMapOf()
 }
+

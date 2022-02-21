@@ -1,3 +1,7 @@
+package calcite
+
+import JAVA_TYPE_FACTORY_IMPL
+import entity.FullyQualifiedTableName
 import org.apache.calcite.adapter.enumerable.EnumerableConvention
 import org.apache.calcite.adapter.jdbc.JdbcSchema
 import org.apache.calcite.avatica.util.Casing
@@ -5,7 +9,6 @@ import org.apache.calcite.config.CalciteConnectionProperty
 import org.apache.calcite.jdbc.CalciteConnection
 import org.apache.calcite.jdbc.Driver
 import org.apache.calcite.rel.RelNode
-import org.apache.calcite.schema.Schema
 import org.apache.calcite.schema.SchemaPlus
 import org.apache.calcite.schema.impl.AbstractSchema
 import org.apache.calcite.sql.parser.SqlParser
@@ -20,7 +23,7 @@ import java.util.Properties
 import javax.sql.DataSource
 
 
-// CalciteSchemaManager holds the master schema that contains all datasource
+// calcite.CalciteSchemaManager holds the master schema that contains all datasource
 // schemas and their sub-schemas
 //
 // It also holds metadata about the datasources and their schemas, like a
@@ -114,6 +117,23 @@ object CalciteSchemaManager {
 
     fun executeQuery(sql: String): ResultSet {
         return executeQuery(CalciteUtils.parse(sql, frameworkConfig))
+    }
+
+    fun executeUpdate(relRoot: RelNode): Int {
+        relRoot.cluster.planner.setRoot(
+            relRoot.cluster.planner.changeTraits(
+                relRoot,
+                relRoot.cluster.traitSet().replace(EnumerableConvention.INSTANCE)
+            )
+        )
+        val bestExp = relRoot.cluster.planner.findBestExp()
+        val relRunner = connection.unwrap(RelRunner::class.java)
+
+        return relRunner.prepareStatement(bestExp).executeUpdate()
+    }
+
+    fun executeUpdate(sql: String): Int {
+        return executeUpdate(CalciteUtils.parse(sql, frameworkConfig))
     }
 
     fun getOrdinalForColumn(

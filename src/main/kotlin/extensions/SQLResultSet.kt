@@ -15,3 +15,4 @@ fun ResultSet.toListOfMaps(): MutableList<MutableMap<String, Any>> {
     }
     return rows
 }
+

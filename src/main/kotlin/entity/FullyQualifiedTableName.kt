@@ -1,3 +1,7 @@
+package entity
+
+import JAVA_TYPE_FACTORY_IMPL
+import calcite.CalciteSchemaManager
 import org.apache.calcite.rel.type.RelDataTypeField
 import org.apache.calcite.schema.SchemaPlus
 import org.apache.calcite.schema.Table

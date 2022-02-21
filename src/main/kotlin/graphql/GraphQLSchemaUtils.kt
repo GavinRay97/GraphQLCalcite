@@ -1,3 +1,5 @@
+package graphql
+
 import graphql.schema.DataFetcher
 import graphql.schema.GraphQLArgument
 import graphql.schema.GraphQLDirective
@@ -98,6 +100,9 @@ class GraphQLInputObjectTypeBuilder {
         return GraphQLInputObjectType
             .newInputObject()
             .apply {
+                println("name: $name")
+                println("description: $description")
+                println("fields: $fields")
                 if (name != null) name(name)
                 if (description != null) description(description)
                 if (fields != null) fields(fields)

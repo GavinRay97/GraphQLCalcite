@@ -45,19 +45,19 @@ class SchemaManagerTest : FunSpec({
     test("Postgres and MySQL") {
         postgresDatasource.connection.createStatement().execute(
             """
-            CREATE SCHEMA IF NOT EXISTS test1;
-            CREATE TABLE IF NOT EXISTS test1.test_table1 (
-                id INT NOT NULL,
-                name VARCHAR(255) NOT NULL,
+            CREATE SCHEMA IF entity.NOT EXISTS test1;
+            CREATE TABLE IF entity.NOT EXISTS test1.test_table1 (
+                id INT entity.NOT NULL,
+                name VARCHAR(255) entity.NOT NULL,
                 PRIMARY KEY (id)
             );
             INSERT INTO test1.test_table1 (id, name) VALUES (1, 'test1');
             INSERT INTO test1.test_table1 (id, name) VALUES (2, 'test2');
             
-            CREATE SCHEMA IF NOT EXISTS test2;
-            CREATE TABLE IF NOT EXISTS test2.test_table2 (
-                id INT NOT NULL,
-                name VARCHAR(255) NOT NULL,
+            CREATE SCHEMA IF entity.NOT EXISTS test2;
+            CREATE TABLE IF entity.NOT EXISTS test2.test_table2 (
+                id INT entity.NOT NULL,
+                name VARCHAR(255) entity.NOT NULL,
                 PRIMARY KEY (id)
             );
             INSERT INTO test2.test_table2 (id, name) VALUES (3, 'test3');
@@ -77,8 +77,8 @@ class SchemaManagerTest : FunSpec({
         mysqlDatasource.connection.createStatement().execute(
             """
             CREATE TABLE test_table3 (
-                id INT NOT NULL,
-                name VARCHAR(255) NOT NULL,
+                id INT entity.NOT NULL,
+                name VARCHAR(255) entity.NOT NULL,
                 PRIMARY KEY (id)
             );
         """.trimIndent()
@@ -161,9 +161,9 @@ class SchemaManagerTest : FunSpec({
         SchemaManager.connection.rootSchema.add("csv", csvSchema)
 
         // when
-        val graphqlSchema = SchemaManager.generateGraphQLSchemaFromRootSchema(SchemaManager.connection.rootSchema)
-        println(SchemaPrinter().print(graphqlSchema))
-        val build: GraphQL = GraphQL.newGraphQL(graphqlSchema).build()
+        val graphql.graphqlSchema = SchemaManager.generateGraphQLSchemaFromRootSchema(SchemaManager.connection.rootSchema)
+        println(SchemaPrinter().print(graphql.graphqlSchema))
+        val build: GraphQL = GraphQL.newGraphQL(graphql.graphqlSchema).build()
         val executionResult: ExecutionResult = build.execute(
             ExecutionInput.newExecutionInput()
                 .query(

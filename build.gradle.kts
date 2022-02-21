@@ -2,6 +2,8 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.0-dev-1582"
     // https://github.com/mrkuz/kradle
     id("net.bitsandbobs.kradle") version "2.2.0"
+
+    id("io.arrow-kt.analysis.kotlin") version "2.0"
 }
 
 group = "com.example"
@@ -11,7 +13,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") }
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
     maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/") }
     maven { url = uri("https://repository.apache.org/content/repositories/snapshots") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
@@ -60,9 +61,10 @@ object Versions {
     const val immutables = "2.8.8"
     const val testcontainers = "1.16.2"
     const val strikt = "0.33.0"
-    const val ktor = "2.0.0-beta-1"
-    const val vertx = "4.2.4"
+    const val vertx = "4.2.5"
     const val kotlinxHtml = "0.7.3"
+    const val teiid = "16.0.0"
+    const val sqlBuilder = "3.0.2"
 }
 
 dependencies {
@@ -76,17 +78,25 @@ dependencies {
     compileOnly("org.immutables:value:${Versions.immutables}")
     implementation("org.hsqldb:hsqldb:2.4.1")
 
+    // Teeid
+    implementation(platform("org.teiid:teiid-parent:${Versions.teiid}"))
+    implementation("org.teiid:teiid-runtime")
+    implementation("org.teiid.connectors:translator-jdbc:${Versions.teiid}")
+
+    implementation("com.healthmarketscience.sqlbuilder:sqlbuilder:${Versions.sqlBuilder}")
+
     // Vert.x
     implementation(platform("io.vertx:vertx-stack-depchain:${Versions.vertx}"))
+    implementation("io.vertx:vertx-core")
+    implementation("io.vertx:vertx-lang-kotlin")
+    implementation("io.vertx:vertx-lang-kotlin-coroutines")
+    implementation("io.vertx:vertx-web")
+    implementation("io.vertx:vertx-web-graphql")
     implementation("io.vertx:vertx-jdbc-client")
     implementation("io.vertx:vertx-oracle-client")
-    implementation("io.vertx:vertx-web-graphql")
-    implementation("io.vertx:vertx-web")
     implementation("io.vertx:vertx-pg-client")
     implementation("io.vertx:vertx-mysql-client")
     implementation("io.vertx:vertx-mssql-client")
-    implementation("io.vertx:vertx-lang-kotlin-coroutines")
-    implementation("io.vertx:vertx-lang-kotlin")
 
     implementation(kotlin("script-runtime"))
     // Kotlinx HTML
